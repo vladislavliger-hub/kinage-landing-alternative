@@ -96,7 +96,12 @@
    24px the white card's padding used to take: the video now fills that room). */
 .hero__media {
   --frame-grow: 12px;
-  --back-x: 22px;
+  /* Grid rule: the video is content and sits exactly on the grid (its right
+     edge on the container's right edge at every width). Only decoration, the
+     backing panel and the shadow, may reach past it, into the page gutter, and
+     never further: the panel's bleed is capped at the gutter, and the hero
+     clips horizontally (overflow-x: clip), so it can never cause a scroll. */
+  --back-x: min(22px, var(--layout-gutter));
   --back-y: 20px;
   justify-self: end;
   width: min(100%, calc((100svh - var(--layout-nav-offset) - var(--layout-nav-height) - 200px) * var(--hero-media-ratio) + 2 * var(--frame-grow)));
@@ -135,13 +140,6 @@
   border-radius: inherit;
 }
 
-/* Wide screens: the card reaches a little past the grid, as in the concept. */
-@media (min-width: 1400px) {
-  .hero__media {
-    margin-right: -28px;
-  }
-}
-
 /* Short laptop windows: a little less air above and below. */
 @media (min-width: 1024px) and (max-height: 820px) {
   .hero {
@@ -174,7 +172,9 @@
   .hero__media {
     --back-x: 10px;
     --back-y: 10px;
-    padding: var(--back-y) var(--back-x) 0 0;
+    /* Room above for the panel's upward offset only; to the right it reaches
+       into the 20px gutter, so the video keeps the full grid width. */
+    padding-top: var(--back-y);
   }
   .hero {
     padding-top: calc(var(--layout-nav-offset) + var(--layout-nav-height) + 24px);
