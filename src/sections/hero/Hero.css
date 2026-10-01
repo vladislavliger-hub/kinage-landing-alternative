@@ -1,0 +1,210 @@
+/*
+ * Hero — Mist Violet wash fading to white, with the Figma texture (Final CTA
+ * "image 269") on top at a quiet Luminosity blend. Desktop: copy left, video
+ * right. Heights come from content; the video's width is capped by the
+ * window height × the file's ratio so the whole frame fits on a laptop.
+ */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--layout-nav-offset) + var(--layout-nav-height) + 80px) 0 var(--space-80);
+  background: linear-gradient(180deg, var(--color-mist-violet) 0%, #f5f3ff 40%, var(--color-white) 88%);
+  overflow-x: clip;
+}
+
+/* Decorative only: the approved texture (Figma "image 269"), treated as in the
+   hero reference (Figma 680:1176 → layer 680:1744): Color Burn at 100% over
+   the #ecebff → white wash, the same crop, its 1440 × 1447 box starting
+   480px above the hero (scaled with the width beyond 1440). Color Burn keeps
+   the lavender's hue and only deepens it in the satin bands, and leaves
+   white untouched, so the hero meets the white section below with no seam.
+   It sits in its own layer under all content: text, buttons, logo, video and
+   controls are never blended. */
+.hero__texture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* The blend sits on this layer itself (the hero is isolated), so it mixes
+     with the hero wash only. */
+  background: url('../../assets/texture/texture-269.png') no-repeat;
+  background-size: max(100%, 1440px) auto;
+  background-position: center min(-480px, -33.333vw);
+  mix-blend-mode: color-burn;
+  pointer-events: none;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 4.6fr) minmax(0, 7.4fr);
+  align-items: center;
+  gap: var(--space-48);
+}
+
+/* Desktop and laptop: at least one screen tall (content centred under the
+   floating nav), so the next section never peeks into the first view. A
+   minimum, not a height: taller content simply grows the hero; very tall
+   monitors stop at 1080px instead of opening an empty band. */
+@media (min-width: 1024px) and (min-height: 600px) {
+  .hero {
+    /* Ends one section-padding above the fold: the next heading starts just
+       below the first screen, with no extra empty band above it. */
+    min-height: calc(min(100svh, 1080px) - var(--section-y) + 12px);
+  }
+}
+
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero__title {
+  max-width: 13ch;
+  font-size: clamp(40px, 3.5vw, 50px);
+  line-height: 1.02;
+  font-weight: var(--type-display-weight);
+  letter-spacing: var(--type-display-tracking);
+  color: var(--text-heading);
+}
+
+.hero__lead {
+  max-width: 34em;
+  margin-top: var(--space-20);
+  font-size: var(--type-body-relaxed-size);
+  line-height: var(--type-body-relaxed-line);
+  color: var(--text-body);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-top: var(--space-40);
+}
+/* Filled and ghost share one size (pack pairing rule). */
+.hero__btn {
+  min-width: 206px;
+}
+
+/* Full column width, capped so the whole card fits under the nav on short
+   windows (the cap is the video's height budget × the file's ratio, plus the
+   card's padding). */
+.hero__media {
+  --frame-pad: 12px;
+  --back-x: 22px;
+  --back-y: 20px;
+  justify-self: end;
+  width: min(100%, calc((100svh - var(--layout-nav-offset) - var(--layout-nav-height) - 200px) * var(--hero-media-ratio) + 2 * var(--frame-pad)));
+  min-width: min(100%, 460px);
+}
+
+/* Layers, back to front, in one positioned wrapper the size of the card:
+   1. the lavender backing panel, offset up and to the right (the only
+      translucent layer);
+   2. the opaque warm-white card, which covers the panel wherever they overlap,
+      so the panel shows only outside the card's top and right edges;
+   3. the video inside the card's slim, even padding;
+   4. the play button and controls (inside the player, above the video). */
+.hero__stack {
+  position: relative;
+  isolation: isolate;
+}
+.hero__backing {
+  position: absolute;
+  inset: calc(-1 * var(--back-y)) calc(-1 * var(--back-x)) var(--back-y) var(--back-x);
+  z-index: 0;
+  border-radius: var(--radius-xl);
+  background: rgba(196, 186, 246, 0.55);
+  pointer-events: none;
+}
+.hero__frame {
+  position: relative;
+  z-index: 1;
+  padding: var(--frame-pad);
+  border: 1px solid #e3dbf5;
+  border-radius: var(--radius-xl);
+  background: #fffcf8;
+  box-shadow:
+    0 28px 48px -28px rgba(42, 26, 56, 0.28),
+    0 2px 6px rgba(42, 26, 56, 0.05);
+}
+.hero__frame .video {
+  width: 100%;
+}
+
+/* Wide screens: the card reaches a little past the grid, as in the concept. */
+@media (min-width: 1400px) {
+  .hero__media {
+    margin-right: -28px;
+  }
+}
+
+/* Short laptop windows: a little less air above and below. */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .hero {
+    padding-top: calc(var(--layout-nav-offset) + var(--layout-nav-height) + 56px);
+    padding-bottom: var(--space-56);
+  }
+  .hero__actions {
+    margin-top: var(--space-36);
+  }
+}
+
+/* Tablet and phones: copy and actions above, the full video below. */
+@media (max-width: 1023px) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-32);
+  }
+  .hero__title {
+    max-width: 16ch;
+  }
+  .hero__media {
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Phones: a smaller offset, kept inside the page gutter (no overflow). */
+  .hero__media {
+    --frame-pad: 8px;
+    --back-x: 10px;
+    --back-y: 10px;
+    padding: var(--back-y) var(--back-x) 0 0;
+  }
+  .hero {
+    padding-top: calc(var(--layout-nav-offset) + var(--layout-nav-height) + 24px);
+    padding-bottom: var(--space-40);
+  }
+  .hero__inner {
+    gap: var(--space-24);
+  }
+  .hero__copy {
+    align-items: stretch;
+  }
+  .hero__title {
+    max-width: none;
+    font-size: 36px;
+    line-height: 1.04;
+  }
+  .hero__lead {
+    margin-top: var(--space-16);
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-line);
+  }
+  .hero__actions {
+    flex-direction: column;
+    margin-top: var(--space-24);
+  }
+  .hero__btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

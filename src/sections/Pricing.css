@@ -1,0 +1,109 @@
+/* Pricing: one large panel (24px), Mist Violet wash, price | plan. */
+.pricing__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--space-56);
+  align-items: center;
+  padding: var(--space-56) var(--space-64);
+  /* Same corners as the founder card (Built by a son who’s been there). */
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-mist-violet) 0%, #f6f3ff 60%, #fbf8ff 100%);
+  box-shadow: 0 0 0 1px rgba(42, 26, 56, 0.06);
+}
+
+.pricing__title {
+  font-size: var(--type-heading-sm-size);
+  line-height: var(--type-heading-sm-line);
+  letter-spacing: var(--type-heading-sm-tracking);
+}
+.pricing__label {
+  margin-top: var(--space-24);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--weight-medium);
+  color: var(--text-body);
+}
+.pricing__amount {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  margin-top: var(--space-4);
+}
+.pricing__amount strong {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-display);
+  color: var(--text-accent);
+}
+.pricing__amount span {
+  font-size: var(--type-body-size);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+.pricing__plan {
+  display: grid;
+  gap: var(--space-20);
+  justify-items: start;
+  padding-left: var(--space-48);
+  border-left: 1px solid rgba(91, 45, 143, 0.14);
+}
+.pricing__lead {
+  font-size: var(--type-body-relaxed-size);
+  line-height: var(--type-body-relaxed-line);
+  color: var(--text-strong);
+}
+.pricing__points {
+  display: grid;
+  gap: var(--space-12);
+}
+.pricing__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  font-size: var(--type-body-size);
+  line-height: 1.5;
+  color: var(--text-body);
+}
+.pricing__check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-amethyst);
+  box-shadow: var(--shadow-sm);
+}
+.pricing__cta {
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 1023px) {
+  .pricing__panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-32);
+    padding: var(--space-48) var(--space-40);
+  }
+  .pricing__plan {
+    padding-left: 0;
+    padding-top: var(--space-32);
+    border-left: 0;
+    border-top: 1px solid rgba(91, 45, 143, 0.14);
+  }
+}
+
+@media (max-width: 767px) {
+  .pricing__panel {
+    padding: var(--space-32) var(--space-20);
+  }
+  .pricing__amount strong {
+    font-size: 52px;
+  }
+  .pricing__cta {
+    width: 100%;
+  }
+}

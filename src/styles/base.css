@@ -1,0 +1,500 @@
+/*
+ * Base — reset, page defaults and the shared primitives every section uses
+ * (container, section heading block, pill tag, buttons, cards, links).
+ * The primitives follow the supplied style reference pack: 8px radius for
+ * every rectangular surface, capsules only for tags and nav items, a filled
+ * button always paired with a ghost button of identical size, a pill tag
+ * above each section heading. Values come only from tokens.css.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-text);
+  font-size: 100%;
+  font-weight: var(--weight-regular);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--layout-nav-height) + var(--layout-nav-offset) + 16px);
+  accent-color: var(--color-amethyst);
+  caret-color: var(--color-amethyst);
+  /* Reserve the scrollbar's width so locking scroll (dialog) never shifts layout. */
+  scrollbar-gutter: stable;
+  scrollbar-color: color-mix(in srgb, var(--color-eggplant) 40%, transparent) transparent;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+  background: var(--surface-page);
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p,
+li,
+blockquote,
+figcaption {
+  text-wrap: pretty;
+}
+
+/* Display face for headings; the text face everywhere else. */
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  color: var(--text-heading);
+}
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--selection);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-md);
+}
+.on-brand :focus-visible,
+.on-brand:focus-visible {
+  outline-color: var(--color-white);
+}
+
+.is-scroll-locked {
+  overflow: hidden;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  background: var(--color-eggplant);
+  color: var(--color-white);
+  font-weight: var(--weight-semibold);
+  transform: translateY(-160%);
+  transition: transform var(--motion-duration-hover) var(--motion-ease-out);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline-color: var(--color-white);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Layout -------------------------------------------------------------
+   8px grid, 1200 max width. Section rhythm by content, never by viewport
+   height: no `vh` heights anywhere, so tall or narrow windows never open
+   empty bands. */
+
+:root {
+  --section-y: var(--layout-section-space);
+  --section-join: var(--layout-section-join);
+  --section-roomy: var(--space-24);
+}
+@media (max-width: 1199px) {
+  :root {
+    --section-y: var(--layout-section-space-tablet);
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --section-y: var(--layout-section-space-mobile);
+    --section-join: var(--space-40);
+    --section-roomy: var(--space-16);
+  }
+}
+
+.container {
+  width: min(var(--layout-container), 100% - 2 * var(--layout-gutter));
+  margin-inline: auto;
+}
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 2 * var(--layout-gutter-mobile));
+  }
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+/* Continues the previous band's surface: no double gap. */
+.section--join {
+  padding-top: var(--section-join);
+}
+.section--warm {
+  background: var(--surface-warm);
+}
+.section--paper {
+  background: var(--surface-paper);
+}
+
+/* ---- Section heading block: pill tag → heading → slate subtext ---------- */
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+}
+.section-head--left {
+  align-items: flex-start;
+  margin-inline: 0;
+  text-align: left;
+}
+
+/* Pill tag (pack: Mist Violet capsule, amethyst text, 4/12 padding). */
+.eyebrow,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-tag);
+  color: var(--text-action);
+  font-family: var(--font-text);
+  font-size: var(--type-tag-size);
+  line-height: var(--type-tag-line);
+  font-weight: var(--type-tag-weight);
+  letter-spacing: var(--type-tag-tracking);
+}
+.tag--warm {
+  background: var(--color-peach-soft);
+  color: var(--text-warm);
+}
+.tag--neutral {
+  background: var(--surface-paper);
+  color: var(--text-body);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+  font-weight: var(--type-heading-weight);
+  letter-spacing: var(--type-heading-tracking);
+  color: var(--text-heading);
+  text-wrap: balance;
+}
+.section-title--lg {
+  font-size: clamp(40px, 4vw, var(--type-heading-xl-size));
+  line-height: var(--type-heading-xl-line);
+  letter-spacing: var(--type-heading-xl-tracking);
+}
+.section-title .accent,
+.accent {
+  color: var(--text-accent);
+}
+
+.section-head .eyebrow + .section-title {
+  margin-top: var(--space-16);
+}
+
+.section-lead {
+  margin-top: var(--space-16);
+  font-size: var(--type-body-relaxed-size);
+  line-height: var(--type-body-relaxed-line);
+  color: var(--text-body);
+  text-wrap: pretty;
+}
+
+@media (max-width: 767px) {
+  .section-title {
+    font-size: var(--type-heading-sm-size);
+    line-height: var(--type-heading-sm-line);
+  }
+  .section-title--lg {
+    font-size: 34px;
+    line-height: 1.04;
+  }
+  .section-lead {
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-line);
+  }
+}
+
+/* ---- Buttons: filled + ghost, identical dimensions ---------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: 48px;
+  padding: 0 var(--space-24);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-text);
+  font-size: var(--type-button-size);
+  line-height: var(--type-button-line);
+  font-weight: var(--type-button-weight);
+  letter-spacing: var(--type-button-tracking);
+  text-decoration: none;
+  transition:
+    background-color var(--motion-duration-hover) var(--motion-ease-out),
+    border-color var(--motion-duration-hover) var(--motion-ease-out),
+    color var(--motion-duration-hover) var(--motion-ease-out),
+    box-shadow var(--motion-duration-hover) var(--motion-ease-out),
+    transform var(--motion-duration-instant) var(--motion-ease-out);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Primary: mandarin fill with a white label and white icons in every state
+   (product decision: white on #DA6C2D is 3.41:1, accepted). Hover lightens a
+   touch, press deepens a touch; no glow, no movement beyond the 2% press. */
+.btn--primary,
+.btn--primary:hover,
+.btn--primary:focus-visible,
+.btn--primary:active {
+  color: var(--action-primary-label);
+}
+.btn--primary {
+  background: var(--action-primary);
+  font-weight: var(--weight-semibold);
+  box-shadow: var(--shadow-sm);
+}
+.btn--primary:hover {
+  background: var(--action-primary-hover);
+}
+.btn--primary:active {
+  background: var(--action-primary-active);
+}
+.btn--primary:focus-visible {
+  outline-color: var(--action-focus);
+}
+
+/* Outlined: mandarin border, deep mandarin label, warm wash on hover. Same
+   size as the filled button (pack pairing rule). */
+.btn--outline,
+.btn--ghost {
+  border-color: var(--action-outline);
+  background: transparent;
+  color: var(--action-outline-label);
+  font-weight: var(--weight-semibold);
+}
+.btn--outline:hover,
+.btn--ghost:hover {
+  background: var(--color-mandarin-tint);
+}
+.btn--outline:active,
+.btn--ghost:active {
+  background: var(--color-mandarin-tint-strong);
+}
+.btn--outline:focus-visible,
+.btn--ghost:focus-visible {
+  outline-color: var(--action-focus);
+}
+
+.btn--sm {
+  min-height: 40px;
+  padding: 0 var(--space-16);
+  font-size: var(--type-button-sm-size);
+}
+
+/* On the eggplant panel. */
+.btn--light {
+  background: var(--color-white);
+  color: var(--color-eggplant);
+}
+.btn--light:hover {
+  background: var(--color-mist-violet);
+}
+.btn--ghost-light {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  color: var(--color-white);
+}
+.btn--ghost-light:hover {
+  border-color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+/* Exception (final call to action on eggplant): these stay white; the
+   mandarin rules above never apply to them. */
+.btn--light:focus-visible,
+.btn--ghost-light:focus-visible {
+  outline-color: var(--color-white);
+}
+
+.btn__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+/* Text link with an arrow — "Kinage for advisors →". */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--weight-medium);
+  color: var(--text-action);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--motion-duration-hover) var(--motion-ease-out);
+}
+.text-link:hover {
+  text-decoration-color: currentColor;
+}
+.text-link__arrow {
+  transition: translate var(--motion-duration-hover) var(--motion-ease-out);
+}
+.text-link:hover .text-link__arrow {
+  translate: 3px 0;
+}
+
+/* Link with a vector arrow — "Read Ben's story", "Kinage for advisors" (final
+   call to action). No underline; the arrow moves on hover, focus shows the ring. */
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--weight-semibold);
+  color: var(--text-action);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: color var(--motion-duration-hover) var(--motion-ease-out);
+}
+.arrow-link__icon {
+  flex: none;
+  transition: translate var(--motion-duration-hover) var(--motion-ease-out);
+}
+.arrow-link:hover {
+  color: var(--color-eggplant);
+}
+.arrow-link:hover .arrow-link__icon,
+.arrow-link:focus-visible .arrow-link__icon {
+  translate: 3px 0;
+}
+
+/* ---- Cards ---------------------------------------------------------------- */
+
+/* White 8px card with hairline and the small shadow (pack card). */
+.surface-card {
+  padding: var(--space-24);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Mist Violet icon tile with a stroke glyph. */
+.icon-tile {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--surface-tag);
+  color: var(--color-amethyst);
+}
+.icon-tile svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-tile--warm {
+  background: var(--color-peach-soft);
+  color: var(--text-warm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

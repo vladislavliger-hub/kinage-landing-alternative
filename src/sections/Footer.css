@@ -1,0 +1,100 @@
+.footer {
+  border-top: 1px solid var(--border-hairline);
+  background: var(--surface-footer);
+}
+.footer__inner {
+  padding-block: var(--space-56) var(--space-32);
+}
+
+.footer__row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  gap: var(--space-40);
+}
+
+.footer__logo {
+  display: inline-flex;
+  border-radius: var(--radius-md);
+}
+.footer__logo .brand__logo {
+  width: 124px;
+  height: auto;
+  margin-block: -2px -6px;
+}
+.footer__tagline {
+  max-width: 280px;
+  margin-top: var(--space-16);
+  font-family: var(--font-display);
+  font-size: var(--type-title-sm-size);
+  line-height: 1.25;
+  font-weight: var(--weight-medium);
+  color: var(--text-heading);
+}
+
+.footer__title {
+  font-size: var(--type-overline-size);
+  line-height: var(--type-overline-line);
+  font-weight: var(--type-overline-weight);
+  letter-spacing: var(--type-overline-tracking);
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+.footer__links {
+  display: grid;
+  gap: var(--space-8);
+  margin-top: var(--space-16);
+}
+.footer__links li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.footer__link {
+  font-size: var(--type-footer-link-size);
+  line-height: var(--type-footer-link-line);
+  color: var(--text-strong);
+  border-radius: 4px;
+  transition: color var(--motion-duration-hover) var(--motion-ease-out);
+}
+.footer__link:hover {
+  color: var(--text-action);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.footer__label {
+  font-size: var(--type-footer-link-size);
+  line-height: var(--type-footer-link-line);
+  color: var(--text-strong);
+}
+
+.footer__copy {
+  margin-top: var(--space-48);
+  padding-top: var(--space-20);
+  border-top: 1px solid var(--border-hairline);
+  font-size: var(--type-footer-meta-size);
+  line-height: var(--type-footer-meta-line);
+  color: var(--text-body);
+}
+
+@media (max-width: 1023px) {
+  .footer__row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer__inner {
+    padding-block: var(--space-40) var(--space-24);
+  }
+  .footer__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-32) var(--space-20);
+  }
+  .footer__copy {
+    margin-top: var(--space-32);
+  }
+}

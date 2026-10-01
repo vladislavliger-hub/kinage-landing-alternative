@@ -1,0 +1,98 @@
+.final__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: var(--space-72) var(--space-40);
+  /* Same corners as the pricing panel and the founder card. */
+  border-radius: var(--radius-md);
+  background: var(--surface-brand);
+  color: var(--text-on-brand);
+  text-align: center;
+}
+/* A low Twilight glow — lavender and peach — rising from the panel's foot. */
+.final__glow {
+  position: absolute;
+  inset: 40% -10% -60%;
+  z-index: -1;
+  background:
+    radial-gradient(40% 50% at 30% 50%, color-mix(in srgb, var(--color-lavender-glow) 45%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 70% 55%, color-mix(in srgb, var(--color-peach) 40%, transparent), transparent 70%);
+  filter: blur(40px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* The Final CTA texture from Figma (layer "image 269", node 673:1145): the
+   desaturated satin image, cropped as in the file, blended with Luminosity at
+   80% over the eggplant. The visible band matches the Figma crop (≈ 59–83% of
+   the image height); `cover` keeps it seamless at every panel size. */
+.final__texture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('../assets/texture/texture-269.png') center 64% / cover no-repeat;
+  mix-blend-mode: luminosity;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.final__title {
+  max-width: 760px;
+  font-size: clamp(36px, 4vw, var(--type-heading-lg-size));
+  line-height: var(--type-heading-lg-line);
+  letter-spacing: var(--type-heading-lg-tracking);
+  color: var(--text-on-brand);
+}
+.final__lead {
+  max-width: 600px;
+  margin-top: var(--space-16);
+  font-size: var(--type-body-relaxed-size);
+  line-height: var(--type-body-relaxed-line);
+  color: var(--text-on-brand-soft);
+}
+.final__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-12);
+  margin-top: var(--space-32);
+}
+.final__btn {
+  min-width: 200px;
+}
+.final__advisor {
+  margin-top: var(--space-20);
+  font-size: var(--type-body-sm-size);
+  color: var(--text-on-brand-soft);
+}
+.final__link,
+.final__link:hover {
+  color: var(--text-on-brand);
+  vertical-align: bottom;
+}
+
+@media (max-width: 767px) {
+  .final__panel {
+    align-items: stretch;
+    padding: var(--space-48) var(--space-20);
+    text-align: left;
+  }
+  .final__title {
+    font-size: var(--type-heading-sm-size);
+    line-height: 1.06;
+  }
+  .final__lead {
+    font-size: var(--type-body-size);
+  }
+  .final__actions {
+    flex-direction: column;
+    margin-top: var(--space-24);
+  }
+  .final__btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
