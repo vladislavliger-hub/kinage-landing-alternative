@@ -326,8 +326,9 @@
 }
 
 /* ---- Hero variant ---------------------------------------------------------
-   Sits inside the hero's warm-white card (Hero.css): the whole frame is
-   always visible, no fade or mask, a hairline edge on the video itself. The
+   Sits directly on the hero's lavender backing panel (Hero.css, no white
+   card): the whole frame is always visible, no fade or mask, a hairline edge
+   on the video itself. The
    box has the file's exact ratio, so `contain` shows the whole frame. */
 .video[data-variant='hero'] {
   border-radius: var(--radius-sm);

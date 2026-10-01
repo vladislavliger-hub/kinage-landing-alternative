@@ -91,25 +91,25 @@
   min-width: 206px;
 }
 
-/* Full column width, capped so the whole card fits under the nav on short
+/* Full column width, capped so the whole video fits under the nav on short
    windows (the cap is the video's height budget × the file's ratio, plus the
-   card's padding). */
+   24px the white card's padding used to take: the video now fills that room). */
 .hero__media {
-  --frame-pad: 12px;
+  --frame-grow: 12px;
   --back-x: 22px;
   --back-y: 20px;
   justify-self: end;
-  width: min(100%, calc((100svh - var(--layout-nav-offset) - var(--layout-nav-height) - 200px) * var(--hero-media-ratio) + 2 * var(--frame-pad)));
+  width: min(100%, calc((100svh - var(--layout-nav-offset) - var(--layout-nav-height) - 200px) * var(--hero-media-ratio) + 2 * var(--frame-grow)));
   min-width: min(100%, 460px);
 }
 
-/* Layers, back to front, in one positioned wrapper the size of the card:
+/* Layers, back to front, in one positioned wrapper the size of the video:
    1. the lavender backing panel, offset up and to the right (the only
       translucent layer);
-   2. the opaque warm-white card, which covers the panel wherever they overlap,
-      so the panel shows only outside the card's top and right edges;
-   3. the video inside the card's slim, even padding;
-   4. the play button and controls (inside the player, above the video). */
+   2. the video itself, opaque, at the full width the white card used to have
+      (no frame), with the card's soft shadow and radius, so the panel shows
+      only outside its top and right edges;
+   3. the play button and controls (inside the player, above the video). */
 .hero__stack {
   position: relative;
   isolation: isolate;
@@ -125,16 +125,14 @@
 .hero__frame {
   position: relative;
   z-index: 1;
-  padding: var(--frame-pad);
-  border: 1px solid #e3dbf5;
   border-radius: var(--radius-xl);
-  background: #fffcf8;
   box-shadow:
     0 28px 48px -28px rgba(42, 26, 56, 0.28),
     0 2px 6px rgba(42, 26, 56, 0.05);
 }
 .hero__frame .video {
   width: 100%;
+  border-radius: inherit;
 }
 
 /* Wide screens: the card reaches a little past the grid, as in the concept. */
@@ -174,7 +172,6 @@
 @media (max-width: 767px) {
   /* Phones: a smaller offset, kept inside the page gutter (no overflow). */
   .hero__media {
-    --frame-pad: 8px;
     --back-x: 10px;
     --back-y: 10px;
     padding: var(--back-y) var(--back-x) 0 0;
