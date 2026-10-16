@@ -10,9 +10,12 @@
   flex-direction: column;
   gap: var(--space-16);
 }
-.trust__card[data-kind='ban'] .icon-tile {
-  background: var(--color-peach-soft);
-  color: var(--text-warm);
+/* The paper icons (128px files, shown at 64): one size, left-aligned with the card text. */
+.trust__icon {
+  display: block;
+  width: var(--space-64);
+  height: var(--space-64);
+  flex: none;
 }
 
 .trust__title {

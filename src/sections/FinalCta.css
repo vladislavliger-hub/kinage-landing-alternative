@@ -1,48 +1,17 @@
+/* Surface, glow and texture: the shared .brand-panel (base.css). */
 .final__panel {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
-  isolation: isolate;
   padding: var(--space-72) var(--space-40);
-  /* Same corners as the pricing panel and the founder card. */
-  border-radius: var(--radius-md);
-  background: var(--surface-brand);
-  color: var(--text-on-brand);
   text-align: center;
-}
-/* A low Twilight glow — lavender and peach — rising from the panel's foot. */
-.final__glow {
-  position: absolute;
-  inset: 40% -10% -60%;
-  z-index: -1;
-  background:
-    radial-gradient(40% 50% at 30% 50%, color-mix(in srgb, var(--color-lavender-glow) 45%, transparent), transparent 70%),
-    radial-gradient(40% 50% at 70% 55%, color-mix(in srgb, var(--color-peach) 40%, transparent), transparent 70%);
-  filter: blur(40px);
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-/* The Final CTA texture from Figma (layer "image 269", node 673:1145): the
-   desaturated satin image, cropped as in the file, blended with Luminosity at
-   80% over the eggplant. The visible band matches the Figma crop (≈ 59–83% of
-   the image height); `cover` keeps it seamless at every panel size. */
-.final__texture {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: url('../assets/texture/texture-269.png') center 64% / cover no-repeat;
-  mix-blend-mode: luminosity;
-  opacity: 0.8;
-  pointer-events: none;
 }
 
 .final__title {
   max-width: 760px;
   font-size: clamp(36px, 4vw, var(--type-heading-lg-size));
-  line-height: var(--type-heading-lg-line);
+  /* The hero headline's ratio (Hero.css). */
+  line-height: var(--type-heading-line);
   letter-spacing: var(--type-heading-lg-tracking);
   color: var(--text-on-brand);
 }
@@ -82,7 +51,7 @@
   }
   .final__title {
     font-size: var(--type-heading-sm-size);
-    line-height: 1.06;
+    line-height: var(--type-heading-sm-line);
   }
   .final__lead {
     font-size: var(--type-body-size);

@@ -1,0 +1,621 @@
+/*
+ * Base: reset, page defaults and the shared primitives every page uses
+ * (container, sections, section heading block, pill tag, buttons, page
+ * backgrounds, banner, links, cards). Values come only from tokens.css.
+ * Rectangular surfaces use the radius scale (sm 6, md 8, lg 12, xl 16);
+ * capsules only for pill tags, nav links and round marks. Paired buttons share
+ * one size. Section headings carry no eyebrow label (the FAQ is the exception).
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-text);
+  font-size: 100%;
+  font-weight: var(--weight-regular);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--layout-nav-height) + var(--layout-nav-offset) + 16px);
+  accent-color: var(--color-amethyst);
+  caret-color: var(--color-amethyst);
+  /* Reserve the scrollbar's width so locking scroll (dialog) never shifts layout. */
+  scrollbar-gutter: stable;
+  scrollbar-color: color-mix(in srgb, var(--color-eggplant) 40%, transparent) transparent;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+  background: var(--surface-page);
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p,
+li,
+blockquote,
+figcaption {
+  text-wrap: pretty;
+}
+
+/* Display face for headings; the text face everywhere else. */
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  color: var(--text-heading);
+}
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  color: var(--text-strong);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--selection);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-md);
+}
+.on-brand :focus-visible,
+.on-brand:focus-visible {
+  outline-color: var(--color-white);
+}
+
+.is-scroll-locked {
+  overflow: hidden;
+}
+
+/* In-page anchor links glide to their target (the browser's own smooth
+   scrolling); instant under reduced motion. Programmatic jumps stay instant
+   (motion/scroll.ts). User scrolling is never affected. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  background: var(--color-eggplant);
+  color: var(--color-white);
+  font-weight: var(--weight-semibold);
+  transform: translateY(-160%);
+  transition: transform var(--motion-duration-hover) var(--motion-ease-out);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline-color: var(--color-white);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Layout -------------------------------------------------------------
+   8px grid, 1200 max width. Section rhythm by content, never by viewport
+   height: no `vh` heights anywhere, so tall or narrow windows never open
+   empty bands. */
+
+:root {
+  --section-y: var(--layout-section-space);
+  --section-join: var(--layout-section-join);
+  --section-roomy: var(--space-24);
+}
+@media (max-width: 1199px) {
+  :root {
+    --section-y: var(--layout-section-space-tablet);
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --section-y: var(--layout-section-space-mobile);
+    --section-join: var(--space-40);
+    --section-roomy: var(--space-16);
+  }
+}
+
+.container {
+  width: min(var(--layout-container), 100% - 2 * var(--layout-gutter));
+  margin-inline: auto;
+}
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 2 * var(--layout-gutter-mobile));
+  }
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+/* Continues the previous band's surface: no double gap. */
+.section--join {
+  padding-top: var(--section-join);
+}
+.section--warm {
+  background: var(--surface-warm);
+}
+.section--paper {
+  background: var(--surface-paper);
+}
+
+/* ---- Section heading block: heading → lead ------------------------------ */
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+}
+.section-head--left {
+  align-items: flex-start;
+  margin-inline: 0;
+  text-align: left;
+}
+
+/* Pill tag: lavender capsule, amethyst text (the FAQ label). */
+.eyebrow,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-tag);
+  color: var(--text-action);
+  font-family: var(--font-text);
+  font-size: var(--type-tag-size);
+  line-height: var(--type-tag-line);
+  font-weight: var(--type-tag-weight);
+  letter-spacing: var(--type-tag-tracking);
+}
+.tag--warm {
+  background: var(--color-peach-soft);
+  color: var(--text-warm);
+}
+.tag--neutral {
+  background: var(--surface-paper);
+  color: var(--text-body);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+  font-weight: var(--type-heading-weight);
+  letter-spacing: var(--type-heading-tracking);
+  color: var(--text-heading);
+  text-wrap: balance;
+}
+.section-title--lg {
+  font-size: clamp(40px, 4vw, var(--type-heading-xl-size));
+  line-height: var(--type-heading-xl-line);
+  letter-spacing: var(--type-heading-xl-tracking);
+}
+.section-title .accent,
+.accent {
+  color: var(--text-accent);
+}
+
+.section-head .eyebrow + .section-title {
+  margin-top: var(--space-16);
+}
+
+.section-lead {
+  margin-top: var(--space-16);
+  font-size: var(--type-body-relaxed-size);
+  line-height: var(--type-body-relaxed-line);
+  color: var(--text-body);
+  text-wrap: pretty;
+}
+
+@media (max-width: 767px) {
+  .section-title {
+    font-size: var(--type-heading-sm-size);
+    line-height: var(--type-heading-sm-line);
+  }
+  .section-title--lg {
+    font-size: 34px;
+    line-height: 1.04;
+  }
+  .section-lead {
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-line);
+  }
+}
+
+/* ---- Buttons: filled + ghost, identical dimensions ---------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: 48px;
+  padding: 0 var(--space-24);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-text);
+  font-size: var(--type-button-size);
+  line-height: var(--type-button-line);
+  font-weight: var(--type-button-weight);
+  letter-spacing: var(--type-button-tracking);
+  text-decoration: none;
+  transition:
+    background-color var(--motion-duration-hover) var(--motion-ease-out),
+    border-color var(--motion-duration-hover) var(--motion-ease-out),
+    color var(--motion-duration-hover) var(--motion-ease-out),
+    box-shadow var(--motion-duration-hover) var(--motion-ease-out),
+    transform var(--motion-duration-instant) var(--motion-ease-out);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Primary: mandarin fill with a white label and white icons in every state
+   (3.4:1). Hover lightens a touch, press deepens a touch; no glow, no
+   movement beyond the 2% press. */
+.btn--primary,
+.btn--primary:hover,
+.btn--primary:focus-visible,
+.btn--primary:active {
+  color: var(--action-primary-label);
+}
+.btn--primary {
+  background: var(--action-primary);
+  box-shadow: var(--shadow-sm);
+}
+.btn--primary:hover {
+  background: var(--action-primary-hover);
+}
+.btn--primary:active {
+  background: var(--action-primary-active);
+}
+.btn--primary:focus-visible {
+  outline-color: var(--action-focus);
+}
+
+/* Outlined (secondary): mandarin border, deep mandarin label, warm wash on
+   hover. Same size as the filled button, so a pair lines up. */
+.btn--outline,
+.btn--ghost {
+  border-color: var(--action-outline);
+  background: transparent;
+  color: var(--action-outline-label);
+}
+.btn--outline:hover,
+.btn--ghost:hover {
+  background: var(--color-mandarin-tint);
+}
+.btn--outline:active,
+.btn--ghost:active {
+  background: var(--color-mandarin-tint-strong);
+}
+.btn--outline:focus-visible,
+.btn--ghost:focus-visible {
+  outline-color: var(--action-focus);
+}
+
+.btn--sm {
+  min-height: 40px;
+  padding: 0 var(--space-16);
+  font-size: var(--type-button-sm-size);
+}
+
+/* On the purple banner. */
+.btn--light {
+  background: var(--color-white);
+  color: var(--color-eggplant);
+}
+.btn--light:hover {
+  background: var(--color-mist-violet);
+}
+.btn--ghost-light {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  color: var(--color-white);
+}
+.btn--ghost-light:hover {
+  border-color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+/* On purple the buttons stay white; the mandarin rules above never apply
+   to them. */
+.btn--light:focus-visible,
+.btn--ghost-light:focus-visible {
+  outline-color: var(--color-white);
+}
+
+.btn__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+/* ---- Hero wash ---------------------------------------------------------------
+ * The home hero's background, shared by the top of /our-story and /advisors:
+ * lavender fading to white, with the Kinage satin texture in Color Burn over
+ * it, placed from the top of the page. Children: .hero-wash__texture (a
+ * decorative span, first in the element).
+ */
+.hero-wash {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--color-mist-violet) 0%, #f5f3ff 45%, #fbfaff 100%);
+}
+.hero-wash__texture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('../assets/texture/texture-269.webp') no-repeat;
+  background-size: max(100%, 1440px) auto;
+  background-position: center min(-480px, -33.333vw);
+  mix-blend-mode: color-burn;
+  /* The image ends 0.669 × its width below the top (W = max(100vw, 1440px):
+     top −W/3, height W × 733/731); it fades out over its last 240px so a
+     taller hero or page top shows no edge where the texture stops. A wash
+     shorter than that (a narrow or very tall window, a wide screen, the For
+     Advisors header) would cut the texture off at its bottom edge, so the
+     fade ends at that edge instead, whichever comes first. */
+  --wash-texture-end: calc(max(100vw, 1440px) * 0.6694);
+  --wash-fade-end: min(var(--wash-texture-end), 100%);
+  mask-image: linear-gradient(180deg, #000 calc(var(--wash-fade-end) - 240px), transparent var(--wash-fade-end));
+  pointer-events: none;
+}
+
+/* ---- Person caption ---------------------------------------------------------
+ * A name in the heading face with the role in body grey under it: Ben's
+ * photo on the home page and on /our-story (components/PersonCaption.tsx
+ * picks the variant for both). Variants (one modifier):
+ *   (none)   left-aligned under the photo (applied)
+ *   --center centred under the photo
+ *   --inline name and role on one line, baseline-aligned
+ */
+.person-caption {
+  display: grid;
+  gap: var(--space-4);
+}
+.person-caption__name {
+  font-family: var(--font-display);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+  letter-spacing: var(--type-title-tracking);
+  color: var(--text-heading);
+}
+.person-caption__role {
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-line);
+  color: var(--text-body);
+}
+.person-caption--center {
+  justify-items: center;
+  text-align: center;
+}
+.person-caption--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-12);
+  row-gap: 0;
+}
+
+/* ---- Brand panel (purple textured banner) ----------------------------------
+ * The purple banner of the closing call to action, shared by pricing: one
+ * surface, one glow, one texture. Children: .brand-panel__glow and
+ * .brand-panel__texture (decorative spans, first in the panel).
+ */
+.brand-panel {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--radius-xl);
+  background: var(--surface-brand);
+  color: var(--text-on-brand);
+}
+/* A low glow, lavender and peach, rising from the panel's foot. */
+.brand-panel__glow {
+  position: absolute;
+  inset: 40% -10% -60%;
+  z-index: -1;
+  background:
+    radial-gradient(40% 50% at 30% 50%, color-mix(in srgb, var(--color-lavender-glow) 45%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 70% 55%, color-mix(in srgb, var(--color-peach) 40%, transparent), transparent 70%);
+  filter: blur(40px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+/* The Kinage satin texture, desaturated, blended with Luminosity at 80% over
+   the purple. `cover` keeps it seamless at every panel size. */
+.brand-panel__texture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('../assets/texture/texture-269.webp') center 64% / cover no-repeat;
+  mix-blend-mode: luminosity;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Text link with an arrow: "Kinage for advisors →". */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--weight-medium);
+  color: var(--text-action);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--motion-duration-hover) var(--motion-ease-out);
+}
+.text-link:hover {
+  text-decoration-color: currentColor;
+}
+.text-link__arrow {
+  transition: translate var(--motion-duration-hover) var(--motion-ease-out);
+}
+.text-link:hover .text-link__arrow {
+  translate: 3px 0;
+}
+
+/* Link with a vector arrow: "Read Ben's story", "Kinage for advisors" (closing
+   banner). No underline; the arrow moves on hover, focus shows the ring. */
+.arrow-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--weight-semibold);
+  color: var(--text-action);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: color var(--motion-duration-hover) var(--motion-ease-out);
+}
+/* Invisible 44px-tall hit area (nothing moves). */
+.arrow-link::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 44px;
+  translate: 0 -50%;
+}
+.arrow-link__icon {
+  flex: none;
+  transition: translate var(--motion-duration-hover) var(--motion-ease-out);
+}
+.arrow-link:hover {
+  color: var(--color-eggplant);
+}
+.arrow-link:hover .arrow-link__icon,
+.arrow-link:focus-visible .arrow-link__icon {
+  translate: 3px 0;
+}
+
+/* ---- Cards ---------------------------------------------------------------- */
+
+/* White card: radius lg, shadow md, 24px padding. */
+.surface-card {
+  padding: var(--space-24);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-md);
+}
+
+/* Lavender icon tile with a stroke glyph. */
+.icon-tile {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--surface-tag);
+  color: var(--color-amethyst);
+}
+.icon-tile svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-tile--warm {
+  background: var(--color-peach-soft);
+  color: var(--text-warm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

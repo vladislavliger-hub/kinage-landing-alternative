@@ -1,8 +1,10 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { EarlyAccessProvider } from './components/EarlyAccess';
 import { pendingDestinations } from './content/links';
+import { PAGE_META } from './content/meta';
+import { applyPageMeta } from './lib/pageMeta';
 import { ScrollTrigger } from './motion/gsap';
-import { initSmoothScroll, jumpTo } from './motion/smoothScroll';
+import { jumpTo } from './motion/scroll';
 import { AdvisorsPage } from './pages/Advisors';
 import { OurStory } from './pages/OurStory';
 import { interceptLinks, pageOf, takePendingScroll, usePathname } from './router';
@@ -11,23 +13,24 @@ import { Compare } from './sections/Compare';
 import { Faq } from './sections/Faq';
 import { FinalCta } from './sections/FinalCta';
 import { Footer } from './sections/Footer';
-import { Hero } from './sections/hero/Hero';
+import { HeroFlight } from './sections/hero/HeroFlight';
 import { HowItWorks } from './sections/how/HowItWorks';
 import { Nav } from './sections/Nav';
 import { Pricing } from './sections/Pricing';
-import { Problem } from './sections/Problem';
-import { Testimonials } from './sections/Testimonials';
 import { Trust } from './sections/Trust';
 
-/** Page order (round 2): hero → problem → walkthrough → pricing → testimonials → comparison → security → founder → FAQ → final call to action. */
+/**
+ * Page order: hero + problem (one flight zone, always adjacent) → the
+ * emotional hook (the closing section, repeated here) → walkthrough → pricing
+ * → comparison → security → founder → FAQ → the closing section again.
+ */
 function Landing() {
   return (
     <>
-      <Hero />
-      <Problem />
+      <HeroFlight />
+      <FinalCta placement="early" />
       <HowItWorks />
       <Pricing />
-      <Testimonials />
       <Compare />
       <Trust />
       <Ben />
@@ -40,6 +43,9 @@ function Landing() {
 export function App() {
   const page = pageOf(usePathname());
 
+  // The current page's title and description (content/meta.ts).
+  useEffect(() => applyPageMeta(PAGE_META[page]), [page]);
+
   useEffect(() => {
     if (import.meta.env.DEV) {
       const pending = pendingDestinations();
@@ -47,14 +53,7 @@ export function App() {
     }
   }, []);
 
-  useEffect(() => {
-    const stopSmooth = initSmoothScroll();
-    const stopLinks = interceptLinks();
-    return () => {
-      stopLinks();
-      stopSmooth();
-    };
-  }, []);
+  useEffect(() => interceptLinks(), []);
 
   // After a page change: go to the saved position (Back/Forward) or the hash
   // target, then let every scroll animation of the new page measure itself.

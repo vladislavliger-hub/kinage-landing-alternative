@@ -69,12 +69,6 @@ export function ConnectSlide({ active, reduced }: { active: boolean; reduced: bo
         <div className="phone__screen p-ui">
           <div className="ob-top">
             <img src={logo} alt="" width={84} height={19} />
-            <span className="ob-progress">
-              <span className="ob-progress__bar">
-                <span style={{ width: done ? '100%' : '75%' }} />
-              </span>
-              {c.progress}
-            </span>
           </div>
           <p className="cn-title">{c.title}</p>
           {/* Slots the cards dock into, and the banner that replaces them. */}

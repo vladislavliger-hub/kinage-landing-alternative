@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactElement } from 'react';
+import { useRef, type ReactElement } from 'react';
 import { EarlyAccessButton } from '../components/EarlyAccess';
 import { ADVISORS_PAGE as A, type AdvisorCard } from '../content/advisors';
 import { LINKS } from '../content/links';
@@ -57,20 +57,13 @@ export function AdvisorsPage() {
   const ref = useRef<HTMLElement>(null);
   useReveal(ref, { targets: '[data-reveal], .adv__card' });
 
-  useEffect(() => {
-    const previous = document.title;
-    document.title = 'For advisors — Kinage';
-    return () => {
-      document.title = previous;
-    };
-  }, []);
-
   return (
     <article className="adv" ref={ref} aria-labelledby="adv-title">
-      <header className="adv__hero">
+      <header className="adv__hero hero-wash">
+        <span className="hero-wash__texture" aria-hidden="true" />
         <div className="container adv__center">
           <h1 className="adv__title" id="adv-title" data-reveal>
-            {A.hero.title.plain} <span className="accent">{A.hero.title.accent}</span>
+            {A.hero.title.plain} {A.hero.title.accent}
           </h1>
           <p className="adv__lede" data-reveal>
             {A.hero.lede}
@@ -86,7 +79,7 @@ export function AdvisorsPage() {
         </div>
       </header>
 
-      <section className="adv__band adv__band--warm" aria-labelledby="adv-problem">
+      <section className="adv__band" aria-labelledby="adv-problem">
         <div className="container adv__narrow">
           <h2 className="section-title adv__h2" id="adv-problem" data-reveal>
             {A.problem.title}
@@ -97,7 +90,7 @@ export function AdvisorsPage() {
         </div>
       </section>
 
-      <section className="adv__band" aria-labelledby="adv-benefits">
+      <section className="adv__band adv__band--warm" aria-labelledby="adv-benefits">
         <div className="container">
           <header className="section-head" data-reveal>
             <h2 className="section-title" id="adv-benefits">

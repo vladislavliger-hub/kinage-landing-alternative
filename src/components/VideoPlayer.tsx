@@ -339,7 +339,7 @@ export function VideoPlayer({ src, poster, title, captions, ref, variant = 'defa
           else togglePlay();
         }}
       >
-        {captions && <track ref={trackRef} kind="subtitles" src={captions.src} srcLang={captions.srclang} label={captions.label} default />}
+        {captions && <track ref={trackRef} kind="captions" src={captions.src} srcLang={captions.srclang} label={captions.label} default />}
       </video>
 
       {variant === 'hero' && <span className="video__edge" aria-hidden="true" />}

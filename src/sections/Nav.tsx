@@ -5,6 +5,7 @@ import { SmartLink } from '../components/SmartLink';
 import { LINKS, SECTIONS, type LinkKey } from '../content/links';
 import { NAV_LINKS } from '../content/site';
 import { withBase } from '../lib/base';
+import { isSiteScroll } from '../motion/scroll';
 import { MOTION } from '../motion/tokens';
 import { pageOf, usePathname } from '../router';
 import './Nav.css';
@@ -21,12 +22,15 @@ const SPY: Partial<Record<LinkKey, string>> = {
  * shadow, pill-shaped items, the current one in Mist Violet, one filled
  * action. Fixed, so it never takes part in layout.
  *
- * Behaviour is scrolling vs idle — not direction: any scroll hides it with a
- * short fade and lift; once no scroll event has arrived for MOTION.nav.idle ms
- * it returns (a little slower than it left). It stays visible while its menu
- * is open, while keyboard focus is inside it, and always under
- * prefers-reduced-motion. While hidden it is `visibility: hidden`, so it can't
- * catch clicks or focus. Below 1024px the links collapse into a menu.
+ * Behaviour is scrolling vs idle, not direction: the reader's own scrolling
+ * hides it with a short fade and lift; once no scroll event has arrived for
+ * MOTION.nav.idle ms it returns (a little slower than it left). A scroll the
+ * site starts itself (an anchor link, a page change, Back / Forward; see
+ * motion/scroll.ts) never hides it: it shows at once and stays until that
+ * scroll has finished. It stays visible while its menu is open, while
+ * keyboard focus is inside it, and always under prefers-reduced-motion.
+ * While hidden it is `visibility: hidden`, so it can't catch clicks or
+ * focus. Below 1024px the links collapse into a menu.
  */
 export function Nav() {
   const [hidden, setHidden] = useState(false);
@@ -64,6 +68,11 @@ export function Nav() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let timer = 0;
     const onScroll = () => {
+      if (isSiteScroll()) {
+        window.clearTimeout(timer);
+        setHidden(false);
+        return;
+      }
       if (reduced.matches || openRef.current || headerRef.current?.contains(document.activeElement)) return;
       setHidden(true);
       window.clearTimeout(timer);
@@ -122,11 +131,11 @@ export function Nav() {
             </li>
           ))}
           <li className="nav__menu-cta">
-            <EarlyAccessButton className="btn btn--primary" onClick={close} />
+            <EarlyAccessButton className="btn btn--outline" onClick={close} />
           </li>
         </ul>
 
-        <EarlyAccessButton className="btn btn--primary btn--sm nav__cta">{LINKS.earlyAccess.label}</EarlyAccessButton>
+        <EarlyAccessButton className="btn btn--outline btn--sm nav__cta">{LINKS.earlyAccess.label}</EarlyAccessButton>
 
         <button
           ref={toggleRef}

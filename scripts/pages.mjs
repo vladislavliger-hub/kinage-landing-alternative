@@ -7,7 +7,7 @@
  *   node scripts/pages.mjs preview   → http://localhost:5201/kinage-landing-alternative/
  *
  * BASE_PATH overrides the default (the Pages workflow sets it from the Pages
- * site itself).
+ * site itself, so a renamed repository or a custom domain needs no change).
  */
 import { build, preview } from 'vite';
 

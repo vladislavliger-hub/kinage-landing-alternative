@@ -7,9 +7,9 @@
  */
 const BASE = import.meta.env.BASE_URL.replace(/\/+$/, ''); // '' or '/kinage-landing-alternative'
 
-/** `/our-story` → `/kinage-landing/our-story` (unchanged at the root). */
+/** `/our-story` → `/kinage-landing-alternative/our-story` (unchanged at the root). */
 export const withBase = (path: `/${string}`): `/${string}` => `${BASE}${path}` as `/${string}`;
 
-/** `/kinage-landing/our-story` → `/our-story`; paths outside the base are returned as they are. */
+/** `/kinage-landing-alternative/our-story` → `/our-story`; paths outside the base are returned as they are. */
 export const stripBase = (pathname: string): string =>
   BASE && (pathname === BASE || pathname.startsWith(`${BASE}/`)) ? pathname.slice(BASE.length) || '/' : pathname;

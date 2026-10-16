@@ -52,7 +52,7 @@ export function Faq() {
                     </span>
                   </button>
                 </h3>
-                <div className="faq__panel" id={panelId} role="region" aria-labelledby={btnId} inert={!isOpen}>
+                <div className="faq__panel" id={panelId} inert={!isOpen}>
                   <div className="faq__panel-inner">
                     {item.answer.map((p) => (
                       <p className="faq__answer" key={p.slice(0, 24)}>

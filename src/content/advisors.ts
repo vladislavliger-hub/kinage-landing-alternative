@@ -47,7 +47,7 @@ export const ADVISORS_PAGE = {
     ] as const,
   },
   close: {
-    title: 'Bring Kinage to one household first',
-    lede: 'Start with a single client household. Nothing about your existing process has to change.',
+    title: 'Bring Kinage to one household first.',
+    lede: 'Start with a single client family. Kinage gives you clearer visibility into bills, cash flow, and family coordination, with no new work required from you.',
   },
 };

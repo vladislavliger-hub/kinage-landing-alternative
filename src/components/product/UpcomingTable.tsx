@@ -16,8 +16,6 @@ type Props = {
   filters?: readonly string[];
   /** Extra badges shown on a row (step 3 adds "Was Flagged" to the AT&T bill). */
   extraBadges?: Record<string, UpcomingRow['badges']>;
-  /** A row to keep at full strength while the others step back. */
-  focusId?: string;
   /** A row drawn with a restrained highlight (background + hairline), others unchanged. */
   highlightId?: string;
 };
@@ -29,9 +27,9 @@ type Props = {
  * Sans 500, the "Cleared by …" line in Museo 300 16, badges, a right-aligned
  * amount and the open arrow. Rows carry `--i` for staggered reveals.
  */
-export function UpcomingTable({ rows, filters, extraBadges, focusId, highlightId }: Props) {
+export function UpcomingTable({ rows, filters, extraBadges, highlightId }: Props) {
   return (
-    <div className="up p-ui" data-focus={focusId ? true : undefined}>
+    <div className="up p-ui">
       {filters && (
         <div className="up__filters">
           {filters.map((f) => (
@@ -50,7 +48,6 @@ export function UpcomingTable({ rows, filters, extraBadges, focusId, highlightId
               className="up__row"
               key={r.id}
               data-edge={r.edge}
-              data-focused={focusId === r.id || undefined}
               data-highlight={highlightId === r.id || undefined}
               style={{ '--i': i } as CSSProperties}
             >

@@ -1,5 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import household from '../../../assets/3d/household-338.webp';
+import household from '../../../assets/3d/household-paper-four.webp';
+import household340 from '../../../assets/3d/household-paper-four-340.webp';
+import household680 from '../../../assets/3d/household-paper-four-680.webp';
 import { Avatar } from '../../../components/product/ProductBadge';
 import { HOW } from '../../../content/home';
 import { useSequence } from '../useSequence';
@@ -10,12 +12,13 @@ const TIMES = [0, 350, 1050] as const;
 type Link = { id: string; d: string };
 
 /**
- * Step 4 — the household at the centre: Figma "image 338" (node 673:1142,
- * the exact export, transparency and perspective intact), with Ben, Sarah and
- * Martha around it and a dashed line from each to the household, its dashes
- * flowing slowly towards the household while the step is on screen (static
- * dashes under reduced motion). The lines are measured from the rendered
- * cards and image, so they stay attached at every size.
+ * Step 4: the household at the centre, the paper-style "Kinage / Your
+ * household" card (four connected people and a check, the decision), with
+ * one member in each corner around it (Ben, Sarah, Martha, David) and a
+ * dashed line from each to the household, its dashes flowing slowly towards
+ * the household while the step is on screen (static dashes under reduced
+ * motion). The lines are measured from the rendered cards and image, so they
+ * stay attached at every size.
  */
 export function DecideSlide({ active, reduced }: { active: boolean; reduced: boolean }) {
   const phase = useSequence(active, TIMES, reduced);
@@ -98,10 +101,18 @@ export function DecideSlide({ active, reduced }: { active: boolean; reduced: boo
         <ul className="hh2__members">
           {card(h.members[0], 0, 'top-left')}
           {card(h.members[1], 1, 'top-right')}
-          {card(h.members[2], 2, 'bottom')}
+          {card(h.members[2], 2, 'bottom-left')}
+          {card(h.members[3], 3, 'bottom-right')}
         </ul>
         <div className="hh2__art" ref={artRef}>
-          <img src={household} alt="" width={960} height={659} />
+          <img
+            src={household}
+            srcSet={`${household340} 340w, ${household680} 680w, ${household} 1040w`}
+            sizes="(max-width: 767px) 230px, 330px"
+            alt=""
+            width={1040}
+            height={585}
+          />
         </div>
       </div>
     </div>

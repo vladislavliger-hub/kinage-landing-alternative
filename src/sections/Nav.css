@@ -37,7 +37,7 @@
   background: rgba(255, 255, 255, 0.74);
   -webkit-backdrop-filter: blur(10px) saturate(1.4);
   backdrop-filter: blur(10px) saturate(1.4);
-  box-shadow: var(--shadow-nav);
+  box-shadow: var(--shadow-md);
   transition: opacity var(--motion-nav-show) var(--motion-ease-out);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -51,9 +51,18 @@
 }
 
 .nav__brand {
+  position: relative;
   display: inline-flex;
   flex: none;
   border-radius: var(--radius-md);
+}
+/* Invisible 44px-tall hit area round the logo (nothing moves). */
+.nav__brand::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 44px;
+  translate: 0 -50%;
 }
 .nav__brand .brand__logo {
   width: 124px;
@@ -68,7 +77,7 @@
   margin-left: auto;
 }
 
-/* Pill item (pack: 1440 radius, 8/16 padding, Inter 500 14, Plum Velvet). */
+/* Pill item (pack: pill radius, 8/16 padding, DM Sans 500 14, Plum Velvet). */
 .nav__link {
   display: inline-flex;
   align-items: center;
@@ -111,6 +120,7 @@
     margin-left: auto;
   }
   .nav__toggle {
+    position: relative;
     display: inline-grid;
     flex: none;
     place-items: center;
@@ -120,6 +130,13 @@
     border-radius: var(--radius-md);
     background: var(--color-white);
     cursor: pointer;
+  }
+  /* Invisible 44 × 44 hit area (the button stays 40 × 40; the inset is
+     measured inside its 1px border). */
+  .nav__toggle::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
   }
   .nav__toggle svg path {
     stroke: var(--color-ink);
@@ -149,7 +166,7 @@
     padding: var(--space-8);
     border-radius: var(--radius-md);
     background: var(--color-white);
-    box-shadow: var(--shadow-nav);
+    box-shadow: var(--shadow-md);
     visibility: hidden;
     opacity: 0;
     transform: translateY(-6px);

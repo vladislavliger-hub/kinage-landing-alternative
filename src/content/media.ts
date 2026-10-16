@@ -1,4 +1,21 @@
+import benPortrait1958 from '../assets/images/ben-terk-portrait-1958.webp';
+import benPortrait979 from '../assets/images/ben-terk-portrait-979.webp';
 import { withBase } from '../lib/base';
+
+/**
+ * Ben's portrait, his head breaking out of the purple rounded panel (client
+ * file "Group 76", 1958 × 2413 native, same crop as the earlier 560 × 690
+ * file; the panel's bottom is the image's bottom). Two copies: the native
+ * size and half of it. `maxWidth` is half the native width, so the photo is
+ * never drawn larger than the file allows at 2x.
+ */
+export const BEN_PORTRAIT = {
+  src: benPortrait979,
+  srcSet: `${benPortrait979} 979w, ${benPortrait1958} 1958w`,
+  width: 1958,
+  height: 2413,
+  maxWidth: '979px',
+} as const;
 
 /**
  * The explainer video — the one final export already used on this page

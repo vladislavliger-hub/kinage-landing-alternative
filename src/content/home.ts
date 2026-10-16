@@ -5,18 +5,20 @@
  * 2026), the Ben Terk Q&A script and the team call of 30 Sep 2026. The
  * agreed copy draft was not available. Messaging rules applied: lead with
  * visibility (see / clear / view / in one place), then action; show who is
- * involved; Kinage flags, people decide. No prices, trials, guarantees or
- * testimonials. Sentences use ordinary punctuation, no dashes as separators.
+ * involved; Kinage flags, people decide. No guarantees and no customer
+ * quotes. Sentences use ordinary punctuation, no dashes as separators.
  */
 
 export const HERO = {
   title: 'See your parent’s bills and payments in one place',
   lead: 'Kinage brings bills and account activity into one shared view, flags what looks unusual, and shows who’s handling it, whether that’s you, your siblings or a trusted advisor.',
+  /** The video block under the actions (Figma 706:2809): a label and a heading beside the phone preview; opens the explainer in a dialog. */
+  video: { label: 'Video overview', title: 'A 1-minute look at Kinage' },
 };
 
 export const PROBLEM = {
   title: 'Right now, it’s hard to see the whole picture',
-  lead: 'You’re probably already managing your parent’s finances in your head, across your email and in three different browsers. One missed bill or one convincing message can become a problem that’s hard to undo.',
+  lead: 'You’re probably already managing your parent’s finances in your head, across your email and in three different browsers. One missed bill or one convincing scam can become a problem that’s hard to undo.',
   cards: [
     {
       image: 'bill',
@@ -27,13 +29,13 @@ export const PROBLEM = {
     {
       image: 'scam',
       title: 'Scams look like real bills',
-      body: 'A “refund” email, a vendor nobody recognises, an amount ten times the usual. By the time someone notices, the money may be gone.',
+      body: 'A “refund” email, a vendor nobody recognizes, an amount ten times the usual. By the time someone notices, the money may be gone.',
       withKinage: 'Kinage flags new vendors, unusual amounts and possible scams as they show up.',
     },
     {
       image: 'family',
       title: '“I thought it was handled”',
-      body: 'When siblings each handle a piece, nobody can see who paid what, and things fall through the gaps.',
+      body: 'When siblings each handle a piece of the puzzle, nobody can see who paid what, and things fall through the gaps.',
       withKinage: 'Everyone sees who’s on point, with a record of what happened.',
     },
   ],
@@ -70,7 +72,7 @@ export type UpcomingRow = {
 /**
  * One household, one bill story, used by all four step visuals. Martha is
  * the parent (Person supported), Ben her son (Coordinator, the signed-in
- * user), Sarah her daughter (Supporter). The AT&T Home Internet bill is the
+ * user), Sarah her daughter (Supporter), David the family's advisor (Advisor). The AT&T Home Internet bill is the
  * one Kinage flags: 18 Apr, $77.26, "Higher than usual and overdue"
  * (Figma 544:337). Roles use the product's own vocabulary
  * (kinage-web-app, household members card).
@@ -91,7 +93,8 @@ export const HOW = {
     {
       short: 'See bills',
       title: 'See every bill in one list',
-      ms: 6000,
+      // One full cycle: rows in (to 1.2 s), the list holds 4 s, rows out (to 6.3 s); moves on in the pause before the replay (6.9 s).
+      ms: 6500,
       body: 'Kinage finds bills and statements in the email and matches them to account activity, so what’s due and what’s paid sit side by side.',
       caption:
         'Upcoming payments in Martha’s household, sorted by urgency. AT&T Home Internet, $77.26, due 18 Apr, is overdue. Netflix is due soon. Con Edison, MetLife Dental and Amazon Prime follow.',
@@ -110,7 +113,7 @@ export const HOW = {
       ms: 7000,
       body: 'You make the call. Everyone involved sees who’s handling what, and every decision is logged.',
       caption:
-        'Martha’s household: Ben, Sarah and Martha are connected to the same household, which has one bill marked Overdue and Was Flagged.',
+        'Martha’s household with four members: Ben the coordinator, Sarah the supporter, Martha the person supported and David the advisor, each connected to the same household.',
     },
   ],
   /**
@@ -119,7 +122,6 @@ export const HOW = {
    * and connects in turn, then one banner confirms both.
    */
   connect: {
-    progress: 'Step 3 of 4',
     title: 'Connect accounts',
     note: 'Both connections are required before Home opens.',
     status: [
@@ -145,6 +147,8 @@ export const HOW = {
     message: 'I found Martha’s AT&T bill. It’s overdue and higher than usual.',
     /** Where in the message the bill is named: the row lights up once typing reaches it. */
     highlightAt: 'AT&T bill',
+    /** Layout only: the bubble breaks its line before this phrase (the words are unchanged). */
+    lineBreakBefore: 'and higher than usual',
   },
   /** Step 4 — the household (Figma "image 338") and the people connected to it. */
   household: {
@@ -153,6 +157,7 @@ export const HOW = {
       { id: 'ben', initials: 'B', name: 'Ben', role: 'Coordinator', tone: 'eggplant' },
       { id: 'sarah', initials: 'S', name: 'Sarah', role: 'Supporter', tone: 'sand' },
       { id: 'martha', initials: 'M', name: 'Martha', role: 'Person supported', tone: 'rose' },
+      { id: 'david', initials: 'D', name: 'David', role: 'Advisor', tone: 'violet' },
     ],
   },
 };
@@ -212,7 +217,7 @@ export const TRUST = {
       title: 'Your parent decides',
       points: [
         'Who takes part and what’s shared',
-        'Whether to use the app at all, since Kinage helps either way',
+        'Whether to use Kinage themselves or have family or advisors handle it',
         'To disconnect accounts at any time',
       ],
     },
@@ -223,7 +228,7 @@ export const BEN = {
   title: 'Built by a son who’s been there',
   /** Ben's words from the Q&A script (Q1), shortened; the omission is marked with an ellipsis. */
   quote: [
-    'My mother went from being ‘older’ to old. It wasn’t one moment; it was the slow realization that she couldn’t manage her administrative life anymore.',
+    'My mother went from being ‘older’ to old. It wasn’t one moment; it was the slow realization that she couldn’t manage her administrative life on her own anymore.',
     'Now I had a second job: making sure bills got paid, catching scams, coordinating with my sister…',
     'So I started Kinage. Not as a finance executive, but as a son who knows what it’s like to get a 3 a.m. call about a shut-off notice.',
   ],
@@ -237,7 +242,9 @@ export const FAQ_HEAD = {
 };
 
 export const FINAL = {
-  /** No full stop after "matters" (refinement brief). */
-  title: 'See what’s happening. Before it matters',
+  /** The emotional hook, right after the problem section. */
+  title: 'Helping manage a parent’s bills shouldn’t be a one-person job',
+  /** The closing banner at the end of the page: its own headline, the same text and actions. */
+  titleEnd: 'Managing a parent’s bills works better as a team',
   lead: 'Nobody has to do this alone. Bring your family and your parent’s advisor into one shared view.',
 };

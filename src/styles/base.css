@@ -1,10 +1,10 @@
 /*
- * Base — reset, page defaults and the shared primitives every section uses
- * (container, section heading block, pill tag, buttons, cards, links).
- * The primitives follow the supplied style reference pack: 8px radius for
- * every rectangular surface, capsules only for tags and nav items, a filled
- * button always paired with a ghost button of identical size, a pill tag
- * above each section heading. Values come only from tokens.css.
+ * Base: reset, page defaults and the shared primitives every page uses
+ * (container, sections, section heading block, pill tag, buttons, page
+ * backgrounds, banner, links, cards). Values come only from tokens.css.
+ * Rectangular surfaces use the radius scale (sm 6, md 8, lg 12, xl 16);
+ * capsules only for pill tags, nav links and round marks. Paired buttons share
+ * one size. Section headings carry no eyebrow label (the FAQ is the exception).
  */
 
 *,
@@ -125,6 +125,15 @@ a {
   overflow: hidden;
 }
 
+/* In-page anchor links glide to their target (the browser's own smooth
+   scrolling); instant under reduced motion. Programmatic jumps stay instant
+   (motion/scroll.ts). User scrolling is never affected. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 .skip-link {
   position: fixed;
   top: 12px;
@@ -202,7 +211,7 @@ a {
   background: var(--surface-paper);
 }
 
-/* ---- Section heading block: pill tag → heading → slate subtext ---------- */
+/* ---- Section heading block: heading → lead ------------------------------ */
 
 .section-head {
   display: flex;
@@ -218,7 +227,7 @@ a {
   text-align: left;
 }
 
-/* Pill tag (pack: Mist Violet capsule, amethyst text, 4/12 padding). */
+/* Pill tag: lavender capsule, amethyst text (the FAQ label). */
 .eyebrow,
 .tag {
   display: inline-flex;
@@ -326,8 +335,8 @@ a {
 }
 
 /* Primary: mandarin fill with a white label and white icons in every state
-   (product decision: white on #DA6C2D is 3.41:1, accepted). Hover lightens a
-   touch, press deepens a touch; no glow, no movement beyond the 2% press. */
+   (3.4:1). Hover lightens a touch, press deepens a touch; no glow, no
+   movement beyond the 2% press. */
 .btn--primary,
 .btn--primary:hover,
 .btn--primary:focus-visible,
@@ -336,7 +345,6 @@ a {
 }
 .btn--primary {
   background: var(--action-primary);
-  font-weight: var(--weight-semibold);
   box-shadow: var(--shadow-sm);
 }
 .btn--primary:hover {
@@ -349,14 +357,13 @@ a {
   outline-color: var(--action-focus);
 }
 
-/* Outlined: mandarin border, deep mandarin label, warm wash on hover. Same
-   size as the filled button (pack pairing rule). */
+/* Outlined (secondary): mandarin border, deep mandarin label, warm wash on
+   hover. Same size as the filled button, so a pair lines up. */
 .btn--outline,
 .btn--ghost {
   border-color: var(--action-outline);
   background: transparent;
   color: var(--action-outline-label);
-  font-weight: var(--weight-semibold);
 }
 .btn--outline:hover,
 .btn--ghost:hover {
@@ -377,7 +384,7 @@ a {
   font-size: var(--type-button-sm-size);
 }
 
-/* On the eggplant panel. */
+/* On the purple banner. */
 .btn--light {
   background: var(--color-white);
   color: var(--color-eggplant);
@@ -394,8 +401,8 @@ a {
   border-color: var(--color-white);
   background: rgba(255, 255, 255, 0.1);
 }
-/* Exception (final call to action on eggplant): these stay white; the
-   mandarin rules above never apply to them. */
+/* On purple the buttons stay white; the mandarin rules above never apply
+   to them. */
 .btn--light:focus-visible,
 .btn--ghost-light:focus-visible {
   outline-color: var(--color-white);
@@ -407,7 +414,112 @@ a {
   flex: none;
 }
 
-/* Text link with an arrow — "Kinage for advisors →". */
+/* ---- Hero wash ---------------------------------------------------------------
+ * The home hero's background, shared by the top of /our-story and /advisors:
+ * lavender fading to white, with the Kinage satin texture in Color Burn over
+ * it, placed from the top of the page. Children: .hero-wash__texture (a
+ * decorative span, first in the element).
+ */
+.hero-wash {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--color-mist-violet) 0%, #f5f3ff 45%, #fbfaff 100%);
+}
+.hero-wash__texture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('../assets/texture/texture-269.webp') no-repeat;
+  background-size: max(100%, 1440px) auto;
+  background-position: center min(-480px, -33.333vw);
+  mix-blend-mode: color-burn;
+  /* The image ends 0.669 × its width below the top (W = max(100vw, 1440px):
+     top −W/3, height W × 733/731); it fades out over its last 240px so a
+     taller hero or page top shows no edge where the texture stops. A wash
+     shorter than that (a narrow or very tall window, a wide screen, the For
+     Advisors header) would cut the texture off at its bottom edge, so the
+     fade ends at that edge instead, whichever comes first. */
+  --wash-texture-end: calc(max(100vw, 1440px) * 0.6694);
+  --wash-fade-end: min(var(--wash-texture-end), 100%);
+  mask-image: linear-gradient(180deg, #000 calc(var(--wash-fade-end) - 240px), transparent var(--wash-fade-end));
+  pointer-events: none;
+}
+
+/* ---- Person caption ---------------------------------------------------------
+ * A name in the heading face with the role in body grey under it: Ben's
+ * photo on the home page and on /our-story (components/PersonCaption.tsx
+ * picks the variant for both). Variants (one modifier):
+ *   (none)   left-aligned under the photo (applied)
+ *   --center centred under the photo
+ *   --inline name and role on one line, baseline-aligned
+ */
+.person-caption {
+  display: grid;
+  gap: var(--space-4);
+}
+.person-caption__name {
+  font-family: var(--font-display);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+  letter-spacing: var(--type-title-tracking);
+  color: var(--text-heading);
+}
+.person-caption__role {
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-line);
+  color: var(--text-body);
+}
+.person-caption--center {
+  justify-items: center;
+  text-align: center;
+}
+.person-caption--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-12);
+  row-gap: 0;
+}
+
+/* ---- Brand panel (purple textured banner) ----------------------------------
+ * The purple banner of the closing call to action, shared by pricing: one
+ * surface, one glow, one texture. Children: .brand-panel__glow and
+ * .brand-panel__texture (decorative spans, first in the panel).
+ */
+.brand-panel {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--radius-xl);
+  background: var(--surface-brand);
+  color: var(--text-on-brand);
+}
+/* A low glow, lavender and peach, rising from the panel's foot. */
+.brand-panel__glow {
+  position: absolute;
+  inset: 40% -10% -60%;
+  z-index: -1;
+  background:
+    radial-gradient(40% 50% at 30% 50%, color-mix(in srgb, var(--color-lavender-glow) 45%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 70% 55%, color-mix(in srgb, var(--color-peach) 40%, transparent), transparent 70%);
+  filter: blur(40px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+/* The Kinage satin texture, desaturated, blended with Luminosity at 80% over
+   the purple. `cover` keeps it seamless at every panel size. */
+.brand-panel__texture {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('../assets/texture/texture-269.webp') center 64% / cover no-repeat;
+  mix-blend-mode: luminosity;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Text link with an arrow: "Kinage for advisors →". */
 .text-link {
   display: inline-flex;
   align-items: center;
@@ -430,17 +542,26 @@ a {
   translate: 3px 0;
 }
 
-/* Link with a vector arrow — "Read Ben's story", "Kinage for advisors" (final
-   call to action). No underline; the arrow moves on hover, focus shows the ring. */
+/* Link with a vector arrow: "Read Ben's story", "Kinage for advisors" (closing
+   banner). No underline; the arrow moves on hover, focus shows the ring. */
 .arrow-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-weight: var(--weight-semibold);
   color: var(--text-action);
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   transition: color var(--motion-duration-hover) var(--motion-ease-out);
+}
+/* Invisible 44px-tall hit area (nothing moves). */
+.arrow-link::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 44px;
+  translate: 0 -50%;
 }
 .arrow-link__icon {
   flex: none;
@@ -456,15 +577,15 @@ a {
 
 /* ---- Cards ---------------------------------------------------------------- */
 
-/* White 8px card with hairline and the small shadow (pack card). */
+/* White card: radius lg, shadow md, 24px padding. */
 .surface-card {
   padding: var(--space-24);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--surface-card);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-md);
 }
 
-/* Mist Violet icon tile with a stroke glyph. */
+/* Lavender icon tile with a stroke glyph. */
 .icon-tile {
   display: grid;
   place-items: center;

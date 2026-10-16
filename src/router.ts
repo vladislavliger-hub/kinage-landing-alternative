@@ -5,14 +5,16 @@
  * refreshes work locally.
  *
  * - Same-origin links that change the page are intercepted and pushed onto
- *   history (see `interceptLinks`); links within the current page — including
- *   /#section hashes on the landing — stay native.
+ *   history (see `interceptLinks`); links within the current page, including
+ *   /#section hashes on the landing, stay native (they glide with CSS
+ *   scroll-behavior) and are marked as the site's own scroll, so the nav
+ *   stays visible while they move the page.
  * - Each history entry remembers its scroll offset, so Back/Forward return
  *   to where the reader was.
  */
 import { useSyncExternalStore } from 'react';
 import { stripBase } from './lib/base';
-import { jumpTo } from './motion/smoothScroll';
+import { jumpTo, markSiteScroll } from './motion/scroll';
 import { PATHS } from './routes';
 
 export { PATHS };
@@ -47,6 +49,8 @@ function bindPopState() {
   if (popBound) return;
   popBound = true;
   window.addEventListener('popstate', (e) => {
+    // Back / Forward: the browser or the page change restores a position.
+    markSiteScroll();
     const state = e.state as { scrollY?: number } | null;
     pending = { hash: location.hash, y: state?.scrollY ?? 0 };
     emit();
@@ -79,7 +83,7 @@ export function interceptLinks(): () => void {
       if (!url.hash) {
         e.preventDefault();
         jumpTo(0);
-      }
+      } else markSiteScroll();
       return;
     }
     e.preventDefault();

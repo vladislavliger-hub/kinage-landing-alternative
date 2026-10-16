@@ -1,15 +1,15 @@
 /*
- * Page type: Plus Jakarta Sans (display, 500/600) and Inter (text and UI,
- * 400–700) — the supplied style reference pack's display substitute and its
- * workhorse text face, self-hosted from @fontsource (OFL). Each file carries
- * unicode-range subsets, so a page in English downloads only Latin.
+ * Page type: Plus Jakarta Sans for headings (display, 500/600) and DM Sans
+ * for everything else — body, nav, buttons, labels, captions, FAQ, forms,
+ * footer (400–700). Both self-hosted from @fontsource (OFL); each file
+ * carries unicode-range subsets, so a page in English downloads only Latin.
  */
 @import '@fontsource/plus-jakarta-sans/500.css';
 @import '@fontsource/plus-jakarta-sans/600.css';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/600.css';
+@import '@fontsource/dm-sans/700.css';
 
 /*
  * Museo Sans — the Kinage product face. Used only inside product frames

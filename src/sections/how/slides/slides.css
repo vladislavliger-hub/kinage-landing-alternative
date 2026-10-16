@@ -5,8 +5,7 @@
  */
 
 /* ---- Step 1: connection cards and the phone -------------------------------
-   (Card offsets use --cx/--cy/--cs: --x and --s are registered globally by
-   the testimonial carousel.)
+   (Card offsets use --cx/--cy/--cs.)
    One coordinate space (.connect, 360 × 540): the phone sits in it, and the
    cards and pointer live in a foreground layer over it, so a floating card
    can reach past the screen and then dock onto its slot inside it. */
@@ -25,10 +24,9 @@
   height: 520px;
   padding: 6px;
   border-radius: 38px;
-  background: #2b1d33;
-  box-shadow:
-    0 32px 40px -20px rgba(42, 26, 56, 0.35),
-    0 0 0 1px rgba(42, 26, 56, 0.2);
+  /* The hero phone's frame colour (HeroVideo.css). */
+  background: var(--color-eggplant);
+  box-shadow: var(--shadow-lg);
 }
 .phone__screen {
   position: relative;
@@ -52,29 +50,6 @@
   width: 84px;
   height: auto;
 }
-.ob-progress {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #525252;
-}
-.ob-progress__bar {
-  width: 48px;
-  height: 4px;
-  overflow: hidden;
-  border-radius: 2px;
-  background: #e7e1d8;
-}
-.ob-progress__bar span {
-  display: block;
-  height: 100%;
-  border-radius: 2px;
-  background: #6c3bb2;
-  transition: width 0.5s var(--motion-ease-out);
-}
-
 .cn-title {
   margin-top: 16px;
   font-size: 20px;
@@ -106,9 +81,9 @@
   gap: 10px;
   padding: 18px 16px;
   border: 1px solid #9fd3b3;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--color-white);
-  box-shadow: 0 0 0 3px rgba(46, 107, 73, 0.08), 0 8px 18px -10px rgba(42, 26, 56, 0.2);
+  box-shadow: 0 0 0 3px rgba(46, 107, 73, 0.08), var(--shadow-sm);
   opacity: 0;
   visibility: hidden;
   translate: 0 8px;
@@ -181,11 +156,9 @@
   height: 78px;
   padding: 18px 14px;
   border: 1px solid rgba(201, 208, 217, 0.9);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--color-white);
-  box-shadow:
-    0 22px 34px -14px rgba(42, 26, 56, 0.32),
-    0 4px 10px rgba(42, 26, 56, 0.06);
+  box-shadow: var(--shadow-lg);
   transform-origin: 0 0;
   transform: translate(var(--cx), var(--cy)) scale(var(--cs));
   transition:
@@ -217,7 +190,7 @@
   --cs: 1;
 }
 .cn-card[data-docked] {
-  box-shadow: 0 1px 2px rgba(42, 26, 56, 0.06);
+  box-shadow: var(--shadow-sm);
 }
 .cn-card[data-pressed] {
   background: #f3f0f8;
@@ -226,9 +199,7 @@
   border-color: #9fd3b3;
 }
 .cn-card[data-status='connected']:not([data-docked]) {
-  box-shadow:
-    0 0 0 3px rgba(46, 107, 73, 0.1),
-    0 22px 34px -14px rgba(42, 26, 56, 0.32);
+  box-shadow: 0 0 0 3px rgba(46, 107, 73, 0.1), var(--shadow-lg);
 }
 .cn-card[data-hidden] {
   opacity: 0;
@@ -319,22 +290,23 @@
   letter-spacing: 0.01em;
   color: #353535;
 }
+/* Rows arrive top to bottom (fade + a small rise), hold, then leave in the
+   same staircase order, rising a little further; phase 0 resets them below,
+   unseen, with no transition. Timing: BillsSlide.tsx (motion tokens). */
 .bills .up__row {
   transition:
-    opacity 0.42s var(--motion-ease-out) calc(var(--i) * 90ms),
-    translate 0.42s var(--motion-ease-out) calc(var(--i) * 90ms);
+    opacity var(--motion-duration-reveal) var(--motion-ease-out) calc(var(--i) * var(--stagger)),
+    translate var(--motion-duration-reveal) var(--motion-ease-out) calc(var(--i) * var(--stagger));
 }
 .bills[data-phase='0'] .up__row {
   opacity: 0;
-  translate: 0 10px;
+  translate: 0 var(--motion-distance-reveal-mobile);
+  transition: none;
 }
 .bills[data-phase='2'] .up__row {
-  transition-delay: 0s;
-}
-
-/* A focused row stays at full strength; the others step back a little. */
-.up[data-focus] .up__row:not([data-focused]) {
-  opacity: 0.7;
+  opacity: 0;
+  translate: 0 calc(-1 * var(--motion-distance-reveal-mobile));
+  transition-timing-function: var(--motion-ease-in-out);
 }
 
 /* ---- Step 3: Kinage's message over the list -------------------------------- */
@@ -367,7 +339,7 @@
 .kmsg__bubble {
   position: relative;
   padding: 11px 14px;
-  border-radius: 2px 8px 8px 8px;
+  border-radius: 2px var(--radius-md) var(--radius-md) var(--radius-md);
   background: var(--color-white);
   filter: drop-shadow(0 0 4.95px rgba(151, 77, 77, 0.14));
   font-size: 16px;
@@ -375,24 +347,43 @@
   font-weight: 300;
   color: #1e1122;
 }
+/* The message's one controlled line break (content: HOW.alert.lineBreakBefore). */
+.kmsg__text {
+  white-space: pre-line;
+}
 .kmsg__rest {
   visibility: hidden;
 }
+/* The dots and the bubble share one cell: the dots while typing, then the
+   bubble (its size is the full sentence, so the list never moves). */
+.kmsg__body {
+  display: grid;
+  justify-items: start;
+}
+.kmsg__dots,
+.kmsg__bubble {
+  grid-area: 1 / 1;
+}
 .kmsg__dots {
-  position: absolute;
-  top: 50%;
-  left: 14px;
   display: flex;
   gap: 6px;
-  translate: 0 -50%;
+  padding: 6px 2px;
   opacity: 0;
-  transition: opacity 0.25s linear;
+  transition: opacity var(--motion-duration-hover) linear;
 }
 .kmsg[data-state='typing'] .kmsg__dots {
   opacity: 1;
 }
-.kmsg[data-state='typing'] .kmsg__text {
-  visibility: hidden;
+.kmsg__bubble {
+  transform-origin: 0 0;
+  transition:
+    opacity var(--motion-duration-hover) var(--motion-ease-out),
+    scale var(--motion-duration-hover) var(--motion-ease-out);
+}
+.kmsg[data-state='hidden'] .kmsg__bubble,
+.kmsg[data-state='typing'] .kmsg__bubble {
+  opacity: 0;
+  scale: 0.96;
 }
 .kmsg__dots i {
   width: 7px;
@@ -424,9 +415,9 @@
   max-width: 620px;
   padding: 20px;
   border: 1px solid rgba(201, 208, 217, 0.8);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: var(--color-white);
-  box-shadow: 0 0 12px rgba(65, 36, 72, 0.06);
+  box-shadow: var(--shadow-md);
 }
 .hh2__head {
   display: flex;
@@ -441,14 +432,14 @@
 }
 .hh2__count {
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   background: #eef1f5;
   font-size: 13px;
   font-weight: 500;
   color: #44505f;
 }
 
-/* Two people above, one below, the household in the middle row. */
+/* Two people above, two below, the household in the middle row. */
 .hh2__map {
   position: relative;
   display: grid;
@@ -470,9 +461,9 @@
   min-width: 0;
   padding: 8px 14px 8px 8px;
   border: 1px solid #e2e2e2;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background: var(--color-white);
-  box-shadow: 0 4px 12px rgba(87, 39, 97, 0.06);
+  box-shadow: var(--shadow-sm);
   transition:
     opacity 0.45s var(--motion-ease-out) calc(var(--i) * 90ms),
     translate 0.45s var(--motion-ease-out) calc(var(--i) * 90ms);
@@ -485,9 +476,13 @@
   grid-area: 1 / 2;
   justify-self: end;
 }
-.hh2__member[data-place='bottom'] {
-  grid-area: 3 / 1 / 4 / 3;
-  justify-self: center;
+.hh2__member[data-place='bottom-left'] {
+  grid-area: 3 / 1;
+  justify-self: start;
+}
+.hh2__member[data-place='bottom-right'] {
+  grid-area: 3 / 2;
+  justify-self: end;
 }
 .hh2[data-phase='0'] .hh2__member {
   opacity: 0;
@@ -528,6 +523,10 @@
   display: block;
   width: 100%;
   height: auto;
+  /* Round corners of 5.83% of the width (as before); the vertical radius is
+     the same length on the 1040 × 585 card. The shadow follows them. */
+  border-radius: 5.83% / 10.36%;
+  box-shadow: var(--shadow-sm);
 }
 
 .hh2__links {
@@ -567,6 +566,17 @@
 @container (max-width: 400px) {
   .connect {
     scale: 0.9;
+  }
+}
+/* The narrowest phones (stage under 313px, viewports under ~368px): a little
+   less inset, so the first clause of the Step 3 message still fits one line
+   and "and higher than usual" starts line 2 at the same font size. */
+@container (max-width: 312px) {
+  .how__slide:has(.flag2) {
+    padding-inline: 8px;
+  }
+  .kmsg__bubble {
+    padding-inline: 12px;
   }
 }
 @container (max-width: 560px) {

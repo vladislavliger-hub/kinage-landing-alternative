@@ -31,7 +31,6 @@ export const SECTIONS = {
   problem: 'why-it-matters',
   howItWorks: 'how-it-works',
   pricing: 'pricing',
-  testimonials: 'what-families-are-saying',
   compare: 'why-kinage',
   security: 'security',
   story: 'ben',

@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { LINKS } from '../content/links';
 import { isContactConfigured, submitContact, type ContactKind } from '../lib/early-access';
-import { lockScroll } from '../motion/smoothScroll';
+import { lockScroll } from '../motion/scroll';
 import './EarlyAccess.css';
 
 /**

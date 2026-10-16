@@ -29,7 +29,7 @@
   padding: var(--space-16) var(--space-20) var(--space-20);
   overflow: hidden;
   border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: transparent;
   text-align: left;
   cursor: pointer;
@@ -44,7 +44,7 @@
 .how__tab[data-active] {
   border-color: rgba(42, 26, 56, 0.06);
   background: var(--color-white);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 .how__tab:focus-visible {
   outline-offset: 2px;
@@ -125,15 +125,15 @@
   height: 620px;
   overflow: clip;
   container-type: inline-size;
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-xl);
   background:
     radial-gradient(70% 60% at 50% 40%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 70%),
     linear-gradient(165deg, #ffffff 0%, #f4f1fb 100%);
-  box-shadow: 0 0 0 1px rgba(42, 26, 56, 0.06);
+  box-shadow: var(--shadow-md);
 }
 .how__stage:focus-visible {
   outline-offset: 4px;
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-xl);
 }
 
 .how__slide {
@@ -177,7 +177,17 @@
   .how__tab-text {
     padding-top: 0;
   }
-  .how__tab-long,
+  /* The full title stays in the accessibility tree (it names the tab); only
+     the short label is shown. */
+  .how__tab-long {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
   .how__tab-body {
     display: none;
   }
@@ -221,7 +231,6 @@
   }
   .how__stage {
     height: 590px;
-    border-radius: var(--radius-md);
   }
   .how__slide {
     padding: var(--space-12);

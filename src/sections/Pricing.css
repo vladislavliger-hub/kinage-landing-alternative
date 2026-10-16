@@ -1,26 +1,24 @@
-/* Pricing: one large panel (24px), Mist Violet wash, price | plan. */
+/* Pricing: the eggplant .brand-panel (surface, glow, texture shared with the
+   final banner), price | plan, all text in the on-brand colours. */
 .pricing__panel {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   gap: var(--space-56);
   align-items: center;
   padding: var(--space-56) var(--space-64);
-  /* Same corners as the founder card (Built by a son who’s been there). */
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--color-mist-violet) 0%, #f6f3ff 60%, #fbf8ff 100%);
-  box-shadow: 0 0 0 1px rgba(42, 26, 56, 0.06);
 }
 
 .pricing__title {
   font-size: var(--type-heading-sm-size);
   line-height: var(--type-heading-sm-line);
   letter-spacing: var(--type-heading-sm-tracking);
+  color: var(--text-on-brand);
 }
 .pricing__label {
   margin-top: var(--space-24);
   font-size: var(--type-body-sm-size);
   font-weight: var(--weight-medium);
-  color: var(--text-body);
+  color: var(--text-on-brand-soft);
 }
 .pricing__amount {
   display: flex;
@@ -34,12 +32,12 @@
   line-height: 1;
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-display);
-  color: var(--text-accent);
+  color: var(--text-on-brand);
 }
 .pricing__amount span {
   font-size: var(--type-body-size);
   font-weight: var(--weight-medium);
-  color: var(--text-strong);
+  color: var(--text-on-brand-soft);
 }
 
 .pricing__plan {
@@ -47,12 +45,12 @@
   gap: var(--space-20);
   justify-items: start;
   padding-left: var(--space-48);
-  border-left: 1px solid rgba(91, 45, 143, 0.14);
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
 }
 .pricing__lead {
   font-size: var(--type-body-relaxed-size);
   line-height: var(--type-body-relaxed-line);
-  color: var(--text-strong);
+  color: var(--text-on-brand);
 }
 .pricing__points {
   display: grid;
@@ -64,7 +62,7 @@
   gap: var(--space-12);
   font-size: var(--type-body-size);
   line-height: 1.5;
-  color: var(--text-body);
+  color: var(--text-on-brand-soft);
 }
 .pricing__check {
   display: grid;
@@ -92,7 +90,7 @@
     padding-left: 0;
     padding-top: var(--space-32);
     border-left: 0;
-    border-top: 1px solid rgba(91, 45, 143, 0.14);
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
   }
 }
 

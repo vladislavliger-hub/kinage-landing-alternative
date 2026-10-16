@@ -10,10 +10,10 @@
   margin: auto;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   background: var(--color-white);
   color: var(--text-body);
-  box-shadow: var(--shadow-dialog);
+  box-shadow: var(--shadow-lg);
   overflow: auto;
   overscroll-behavior: contain;
 }
@@ -60,6 +60,13 @@
   background: var(--color-lilac);
   cursor: pointer;
   transition: background-color var(--motion-duration-hover) var(--motion-ease-out);
+}
+/* Invisible 44 × 44 hit area (the button stays 40 × 40). */
+.ea__close::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
 }
 .ea__close:hover {
   background: var(--color-orchid);
@@ -131,7 +138,7 @@
   min-height: 48px;
   padding: 12px 14px;
   border: 1px solid var(--border-field);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: var(--color-white);
   color: var(--text-heading);
   font: inherit;
@@ -216,7 +223,7 @@
   }
 }
 
-/* Page scroll lock while the dialog is open (motion/smoothScroll.ts). */
+/* Page scroll lock while the dialog is open (motion/scroll.ts). */
 html.is-scroll-locked {
   overflow: hidden;
 }

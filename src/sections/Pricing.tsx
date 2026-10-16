@@ -8,8 +8,10 @@ import './Pricing.css';
 
 /**
  * Pricing — the current landing's pricing banner, rebuilt on this page's
- * tokens: one wide panel with the price on the left and the plan points and
- * "Ask about plans" (contact dialog, plans mode) on the right. The household
+ * tokens: one wide eggplant panel (the final banner's shared .brand-panel:
+ * same surface, glow and texture) with the price on the left and the plan
+ * points and "Ask about plans" (white button, contact dialog, plans mode) on
+ * the right. The household
  * illustration moved to the walkthrough (step 4), so the panel is two text
  * columns. The amount is a local placeholder (content/pricing.ts).
  */
@@ -21,7 +23,9 @@ export function Pricing() {
   return (
     <section className="section pricing" id={SECTIONS.pricing} aria-labelledby="pricing-title" ref={ref}>
       <div className="container">
-        <div className="pricing__panel" data-reveal>
+        <div className="pricing__panel brand-panel on-brand" data-reveal>
+          <span className="brand-panel__glow" aria-hidden="true" />
+          <span className="brand-panel__texture" aria-hidden="true" />
           <div className="pricing__price" data-reveal>
             <h2 className="pricing__title" id="pricing-title">
               {PRICING.title}
@@ -44,7 +48,7 @@ export function Pricing() {
                 </li>
               ))}
             </ul>
-            <EarlyAccessButton mode="plans" className="btn btn--primary pricing__cta">
+            <EarlyAccessButton mode="plans" className="btn btn--light pricing__cta">
               {PRICING.cta}
               <Icon name="arrowRight" size={18} strokeWidth={2} />
             </EarlyAccessButton>

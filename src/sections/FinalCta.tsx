@@ -8,24 +8,28 @@ import { useReveal } from '../motion/useReveal';
 import './FinalCta.css';
 
 /**
- * 9 — Final call to action: the eggplant panel (24px, the reference pack's
- * large-panel radius) with the confirmed tagline, a filled + ghost pair of
- * identical size, and the advisor link.
+ * The emotional hook / final call to action: the eggplant panel with the
+ * hook headline, a filled + ghost pair of identical size, and the advisor
+ * link. Rendered twice: right after the problem section and at the end of
+ * the page, each with its own headline (same text and actions); only the end
+ * one carries the #get-started anchor.
  */
-export function FinalCta() {
+export function FinalCta({ placement = 'end' }: { placement?: 'early' | 'end' }) {
+  const early = placement === 'early';
+  const titleId = early ? 'final-title-early' : 'final-title';
   const ref = useRef<HTMLElement>(null);
   // The panel, then its heading, text and actions (the white buttons are never moved themselves).
   useReveal(ref, { targets: '[data-reveal], .final__title, .final__lead, .final__actions, .final__advisor' });
 
   return (
-    <section className="section section--join final" id={SECTIONS.getStarted} aria-labelledby="final-title" ref={ref}>
+    <section className="section section--join final" id={early ? undefined : SECTIONS.getStarted} data-placement={placement} aria-labelledby={titleId} ref={ref}>
       <div className="container">
-        <div className="final__panel on-brand" data-reveal>
-          <span className="final__glow" aria-hidden="true" />
+        <div className="final__panel brand-panel on-brand" data-reveal>
+          <span className="brand-panel__glow" aria-hidden="true" />
           {/* Figma 14 - FINAL CTA → "image 269": Luminosity, 80%. */}
-          <span className="final__texture" aria-hidden="true" />
-          <h2 className="final__title" id="final-title">
-            {FINAL.title}
+          <span className="brand-panel__texture" aria-hidden="true" />
+          <h2 className="final__title" id={titleId}>
+            {early ? FINAL.title : FINAL.titleEnd}
           </h2>
           <p className="final__lead">{FINAL.lead}</p>
           <div className="final__actions">

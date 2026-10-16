@@ -25,7 +25,9 @@ const SLIDES = [ConnectSlide, BillsSlide, FlagSlide, DecideSlide];
  * disagree.
  *
  * - Autoplay 1 → 2 → 3 → 4 → 1, each step for its own scene length (7–8 s
- *   for the animated scenes, 6 s for the list). It starts at step 1 when the
+ *   for the animated scenes, 5 s for the list). While a step is active its
+ *   visual loops (end state held 4 s, then replayed; useSequence), also on
+ *   hover when autoplay is paused. It starts at step 1 when the
  *   section first comes into view, and runs only while the section is on
  *   screen, the tab is visible, nobody is hovering or focused inside the
  *   steps or stage, and motion is allowed. Any pause restarts a full

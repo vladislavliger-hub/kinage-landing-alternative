@@ -1,84 +1,119 @@
 /*
- * Three cards on four shared rows: art · title · body · benefit. Each card
- * spans the rows through subgrid, so every row takes the tallest card's
- * height and the dividers and benefit rows align. Cards are equal height.
+ * Problem section in the V1 landing's layout: three lavender cards whose
+ * art areas (336 × 201 at the reference size) receive the hero's objects.
+ * This page's copy sits on four shared subgrid rows (art · title · body ·
+ * "With Kinage"), so titles, dividers and benefit rows line up across cards.
  */
+
+/* The full section padding above the heading (below the hero's tail colour). */
+.problem {
+  /* One gap between the cards, reused above the stat block below them. */
+  --problem-gap: var(--space-24);
+  padding-top: var(--section-y);
+  background: var(--surface-page);
+}
+
+.problem__head {
+  position: relative;
+  z-index: 3;
+}
+
 .problem__cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: auto auto 1fr auto;
-  column-gap: var(--space-24);
+  column-gap: var(--problem-gap);
   margin-top: var(--space-48);
 }
 
-.problem__card {
+.problem-card {
   display: grid;
   grid-row: span 4;
   grid-template-rows: subgrid;
   row-gap: 0;
-  padding: var(--space-24) var(--space-24) var(--space-20);
+  padding: var(--space-28) var(--space-24) var(--space-24);
+  border-radius: var(--radius-lg);
+  background: var(--color-mist-violet);
 }
 
-/* One image region for all three objects (trimmed files, contain). */
-.problem__art {
-  display: flex;
-  align-items: center;
-  width: 96px;
-  height: 92px;
+/* The objects' landing area (V1): same proportions at every width. */
+.problem-card__art {
+  position: relative;
+  aspect-ratio: 336 / 201;
   margin-bottom: var(--space-20);
+  container-type: inline-size;
 }
-.problem__img {
+.problem-card__slot,
+.problem-card__shadow {
+  position: absolute;
+}
+.problem-card__slot img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: left center;
+}
+.problem-card__shadow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Soft contact shadows under the objects, sized relative to the art box. */
+.problem-card__shadow-blur {
+  flex: none;
+  background: #5b5168;
+  border-radius: calc(var(--radius) / 336 * 100cqw);
+  filter: blur(calc(var(--blur) / 336 * 100cqw));
+}
+.problem-card__shadow-svg {
+  position: relative;
+  flex: none;
+}
+.problem-card__shadow-svg img {
+  position: absolute;
+  width: 202.23%;
+  height: 202.71%;
+  max-width: none;
 }
 
-.problem__title {
+/* Copy above the flight's back layer (z 2). */
+.problem-card__title,
+.problem-card__body,
+.problem-card__answer {
+  position: relative;
+  z-index: 3;
+}
+.problem-card__title {
   font-size: var(--type-title-size);
   line-height: var(--type-title-line);
   letter-spacing: var(--type-title-tracking);
 }
-.problem__body {
+.problem-card__body {
   margin-top: var(--space-8);
   font-size: var(--type-body-sm-size);
   line-height: var(--type-body-sm-line);
   color: var(--text-body);
 }
-.problem__answer {
-  display: flex;
-  gap: var(--space-12);
-  margin-top: var(--space-20);
-  padding-top: var(--space-16);
-  border-top: 1px solid var(--border-hairline);
+/* The "With Kinage" row: one paragraph gap under the body, no divider, no
+   icon, the same left edge as the title and body; pretty wrapping keeps a
+   single word off the last line. */
+.problem-card__answer {
+  margin-top: var(--space-16);
   font-size: var(--type-body-sm-size);
   line-height: 1.5;
-  color: var(--text-strong);
+  color: var(--text-body);
+  text-wrap: pretty;
 }
-.problem__answer strong {
+.problem-card__answer strong {
   font-weight: var(--weight-semibold);
   color: var(--text-accent);
 }
-.problem__check {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 22px;
-  height: 22px;
-  margin-top: 1px;
-  border-radius: 50%;
-  background: var(--color-mist-violet);
-  color: var(--color-amethyst);
-}
-
 .problem__stat {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: var(--space-32);
-  margin: var(--space-32) 0 0;
+  margin: var(--problem-gap) 0 0;
   padding: var(--space-24) var(--space-32);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-paper);
 }
 .problem__stat-value {
@@ -95,62 +130,41 @@
   gap: 4px;
   font-size: var(--type-body-size);
   line-height: 1.5;
-  color: var(--text-strong);
+  color: var(--text-body);
 }
 .problem__stat-text small {
   font-size: var(--type-body-xs-size);
   color: var(--text-body);
 }
 
-/* Stacked cards: art on the left, the same four parts on the right. */
 @media (max-width: 1023px) {
-  .problem__cards {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    row-gap: var(--space-16);
-    max-width: 640px;
-    margin-inline: auto;
+  .problem {
+    --problem-gap: var(--space-16);
   }
-  .problem__card {
-    grid-row: auto;
-    grid-template-columns: 72px minmax(0, 1fr);
-    grid-template-rows: auto auto 1fr;
-    column-gap: var(--space-20);
-    align-items: start;
-  }
-  .problem__art {
-    grid-row: 1 / span 3;
-    width: 72px;
-    height: 72px;
-    margin: 0;
-  }
-  .problem__answer {
-    grid-column: 2;
-  }
-  .problem__stat {
-    max-width: 640px;
-    margin-inline: auto;
+  .problem-card {
+    padding: var(--space-20) var(--space-16);
   }
 }
 
+/* Phones: one card per row, the art area above the copy (objects never over text). */
 @media (max-width: 767px) {
   .problem__cards {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    row-gap: var(--problem-gap);
     margin-top: var(--space-32);
   }
-  .problem__card {
-    grid-template-columns: 56px minmax(0, 1fr);
-    column-gap: var(--space-16);
-    padding: var(--space-20);
+  .problem-card {
+    grid-row: auto;
+    grid-template-rows: auto;
+    padding: var(--space-24) var(--space-20);
   }
-  .problem__art {
-    width: 56px;
-    height: 56px;
+  .problem-card__art {
+    width: min(100%, 360px);
+    margin-inline: auto;
   }
-  .problem__title {
+  .problem-card__title {
     font-size: var(--type-title-sm-size);
-  }
-  .problem__answer {
-    grid-column: 1 / -1;
   }
   .problem__stat {
     grid-template-columns: minmax(0, 1fr);

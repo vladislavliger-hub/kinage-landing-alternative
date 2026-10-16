@@ -17,12 +17,11 @@
   width: min(var(--layout-container-narrow), 100% - 2 * var(--layout-gutter));
 }
 
-/* Header: clears the fixed nav, then the page rhythm. */
+/* Header: clears the fixed nav, then the page rhythm. Background: the home
+   hero's wash and texture (.hero-wash, base.css); no card. */
 .adv__hero {
   padding-top: calc(var(--layout-nav-offset) + var(--layout-nav-height) + var(--section-join));
   padding-bottom: var(--section-y);
-  /* Same full-bleed wash as the landing hero. */
-  background: linear-gradient(180deg, var(--color-mist-violet) 0%, var(--color-white) 100%);
 }
 .adv__title {
   width: min(880px, 100%);
@@ -32,10 +31,6 @@
   letter-spacing: var(--type-heading-xl-tracking);
   color: var(--text-heading);
   text-wrap: balance;
-}
-.adv__title .accent,
-.adv .section-title .accent {
-  color: var(--text-accent);
 }
 
 .adv__lede {
@@ -133,7 +128,7 @@
   align-items: center;
   gap: var(--space-16);
   padding: var(--space-16) var(--space-20);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--color-white) 8%, transparent);
   font-size: var(--type-body-size);
   line-height: var(--type-body-line);

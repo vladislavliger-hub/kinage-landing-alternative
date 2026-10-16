@@ -19,7 +19,6 @@ export const MOTION = {
     accordion: seconds(m.duration.accordion.$value),
     reveal: seconds(m.duration.reveal.$value),
     revealSlow: seconds(m.duration['reveal-slow'].$value),
-    carousel: seconds(m.duration.carousel.$value),
   },
   bezier: {
     out: bezier(m.ease.out.$value),
@@ -44,14 +43,21 @@ export const MOTION = {
     show: seconds(m.nav.show.$value),
     distance: px(m.nav.distance.$value),
   },
-  carousel: {
-    interval: m.carousel.interval.$value,
-    sideScale: m.carousel['side-scale'].$value,
-    activeScale: m.carousel['active-scale'].$value,
+  /** Hero → problem shared-element flight (motion.flight, values from the V1 landing). */
+  flight: {
+    end: m.flight.end.$value,
+    spread: m.flight.spread.$value,
+    shadowIn: m.flight['shadow-in'].$value,
+    minWidth: m.flight['min-width'].$value,
   },
-  smooth: {
-    lerp: m.smooth.lerp.$value,
-    minWidth: m.smooth['min-width'].$value,
+  /** Dotted hero rings (motion.arcs). */
+  arcs: {
+    period: m.arcs.period.$value,
+    ramp: m.arcs.ramp.$value,
+  },
+  /** How it works: end-state hold (ms) before an active step's animation replays (motion.walkthrough). */
+  walkthrough: {
+    hold: m.walkthrough.hold.$value,
   },
 } as const;
 
@@ -60,4 +66,5 @@ export const MQ = {
   motion: '(prefers-reduced-motion: no-preference)',
   reduced: '(prefers-reduced-motion: reduce)',
   mobile: '(max-width: 767px)',
+  tabletUp: `(min-width: ${m.flight['min-width'].$value}px)`,
 } as const;

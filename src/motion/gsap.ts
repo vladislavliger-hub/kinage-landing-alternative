@@ -3,14 +3,14 @@
  * plugins and custom eases are always registered first.
  *
  * Division of labour (never two systems on one property of one element):
- *   GSAP + ScrollTrigger — hero flight, section reveals, product demo timeline.
- *   CSS transitions      — hover/focus/press, FAQ height + indicator,
- *                          testimonial track and card emphasis.
+ *   GSAP + ScrollTrigger — hero flight and rings, section reveals, product demo timeline.
+ *   CSS transitions      — hover/focus/press, FAQ height + indicator.
  */
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CustomEase } from 'gsap/CustomEase';
 import { useGSAP } from '@gsap/react';
+import { jumpTo } from './scroll';
 import { MOTION } from './tokens';
 
 gsap.registerPlugin(ScrollTrigger, CustomEase, useGSAP);
@@ -38,7 +38,7 @@ ScrollTrigger.addEventListener('refresh', () => {
   const y = scrollBeforeMediaChange;
   scrollBeforeMediaChange = null;
   const max = document.documentElement.scrollHeight - window.innerHeight;
-  if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, Math.min(y, max));
+  if (Math.abs(window.scrollY - y) > 2) jumpTo(Math.min(y, max));
 });
 
 export { gsap, ScrollTrigger, useGSAP };
